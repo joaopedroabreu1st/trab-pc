@@ -1,0 +1,40 @@
+name: lab08-compose-fundamentos
+
+services:
+  apache:
+    image: httpd:2.4
+    ports:
+      - "8080:80"
+    volumes:
+      - ./apache/site:/usr/local/apache2/htdocs
+      - ./apache/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+    networks:
+      - rede-lab08
+
+  backend:
+    build: ./backend
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4000/status"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    networks:
+      - rede-lab08
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8081:80"
+    volumes:
+      - ./nginx/site:/usr/share/nginx/html:ro
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      NGINX_HOST: lab08.unifeg.local
+    depends_on:
+      - backend
+    networks:
+      - rede-lab08
+
+networks:
+  rede-lab08:
+    driver: bridge

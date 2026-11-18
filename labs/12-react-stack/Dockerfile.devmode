@@ -1,0 +1,10 @@
+# Desafio da Prática 12: alternativa (NÃO recomendada) que roda o servidor de
+# desenvolvimento do Vite em produção — só para comparar o tamanho da imagem.
+FROM node:20-alpine
+WORKDIR /app
+COPY app-react/package.json ./
+RUN npm install
+COPY app-react/src ./src
+COPY app-react/index.html app-react/vite.config.js ./
+EXPOSE 5173
+CMD ["npm", "run", "dev"]
