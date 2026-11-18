@@ -1,0 +1,89 @@
+﻿# pratica01-fundamentos  -  executado em 2026-11-04 21:27:24 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - primeiro container (hello-world)
+
+PS> docker run hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+
+## Passo 2 - container que executa um comando e termina
+
+PS> docker run --rm alpine echo "Ola, Unifeg"
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+7b229517ed22: Pulling fs layer
+7b229517ed22: Verifying Checksum
+7b229517ed22: Download complete
+7b229517ed22: Pull complete
+Digest: sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
+Status: Downloaded newer image for alpine:latest
+Ola, Unifeg
+
+## Passo 3 - container interativo nomeado (comandos digitados no shell do container)
+
+PS> docker run -i --name meu-alpine alpine sh
+   (comandos digitados dentro do container:)
+   # hostname
+   # exit
+13a43dfa74ab
+
+## Passo 4 - containers em execução e todos os containers
+
+PS> docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+PS> docker ps -a
+CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                              PORTS     NAMES
+13a43dfa74ab   alpine        "sh"       1 second ago    Exited (0) Less than a second ago             meu-alpine
+c8416bfd505b   hello-world   "/hello"   7 seconds ago   Exited (0) 6 seconds ago                      nostalgic_greider
+58dea4b1ecdb   hello-world   "/hello"   8 seconds ago   Exited (0) 7 seconds ago                      loving_haslett
+
+## Passo 5 - logs e remoção
+
+PS> docker logs meu-alpine
+13a43dfa74ab
+
+PS> docker rm meu-alpine
+meu-alpine
+
+## Desafio - três containers em segundo plano + filtro por prefixo
+
+PS> docker run -d --name lab01-c1 alpine sleep 300
+d3b3a84f8a5a650d4044801536a17d03db3eef250642d94606c7dadc43082ca3
+
+PS> docker run -d --name lab01-c2 alpine sleep 300
+8be7f1e8fb25ebe30ae3d558d3bccd3bb51c1c1cffe083432101e5aad3422844
+
+PS> docker run -d --name lab01-c3 alpine sleep 300
+a7530f1661c835e54f49e4f943c3b83089b26b96f493a516c191077348e83efe
+
+PS> docker ps --filter "name=^lab01-"
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                  PORTS     NAMES
+a7530f1661c8   alpine    "sleep 300"   1 second ago    Up Less than a second             lab01-c3
+8be7f1e8fb25   alpine    "sleep 300"   1 second ago    Up Less than a second             lab01-c2
+d3b3a84f8a5a   alpine    "sleep 300"   2 seconds ago   Up 1 second                       lab01-c1
+
+PS> docker rm -f lab01-c1 lab01-c2 lab01-c3
+lab01-c1
+lab01-c2
+lab01-c3

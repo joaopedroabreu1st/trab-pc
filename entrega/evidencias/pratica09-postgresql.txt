@@ -1,0 +1,248 @@
+﻿# pratica09-postgresql  -  executado em 2026-11-04 21:35:20 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - .env a partir do .env.example (senha trocada por uma senha gerada; não exibida aqui)
+
+PS> Copy-Item .env.example .env -Force
+   (.env criado; POSTGRES_PASSWORD trocada por uma senha gerada)
+
+## Passo 2 - volume nomeado e Postgres
+
+PS> docker volume create pgdata-lab09
+pgdata-lab09
+
+PS> docker run -d --name lab-postgres --env-file .env -v pgdata-lab09:/var/lib/postgresql/data -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\09-postgresql\init:/docker-entrypoint-initdb.d:ro" -p 5432:5432 postgres:16-alpine
+fdbeb10d0463ad4696fabeab53b4cb7b563cbd2fb003dfc8d6c2e19306090474
+
+PS> docker logs lab-postgres
+The files belonging to this database system will be owned by user "postgres".
+sh: locale: not found
+This user must also own the server process.
+2026-11-05 00:35:22.304 UTC [35] WARNING:  no usable system locales were found
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+waiting for server to start....2026-11-05 00:35:23.632 UTC [41] LOG:  starting PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+2026-11-05 00:35:23.637 UTC [41] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-05 00:35:23.648 UTC [44] LOG:  database system was shut down at 2026-11-05 00:35:23 UTC
+2026-11-05 00:35:23.660 UTC [41] LOG:  database system is ready to accept connections
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/01-schema.sql
+CREATE TABLE
+
+
+/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/02-seed.sql
+INSERT 0 3
+
+
+waiting for server to shut down...2026-11-05 00:35:23.881 UTC [41] LOG:  received fast shutdown request
+.2026-11-05 00:35:23.884 UTC [41] LOG:  aborting any active transactions
+2026-11-05 00:35:23.888 UTC [41] LOG:  background worker "logical replication launcher" (PID 47) exited with exit code 1
+2026-11-05 00:35:24.139 UTC [1] LOG:  starting PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+2026-11-05 00:35:23.890 UTC [42] LOG:  shutting down
+2026-11-05 00:35:23.894 UTC [42] LOG:  checkpoint starting: shutdown immediate
+2026-11-05 00:35:24.062 UTC [42] LOG:  checkpoint complete: wrote 938 buffers (5.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.047 s, sync=0.110 s, total=0.173 s; sync files=305, longest=0.004 s, average=0.001 s; distance=4303 kB, estimate=4303 kB; lsn=0/192AE18, redo lsn=0/192AE18
+2026-11-05 00:35:24.080 UTC [41] LOG:  database system is shut down
+ done
+server stopped
+
+PostgreSQL init process complete; ready for start up.
+
+2026-11-05 00:35:24.139 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-11-05 00:35:24.139 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2026-11-05 00:35:24.147 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-05 00:35:24.159 UTC [61] LOG:  database system was shut down at 2026-11-05 00:35:24 UTC
+2026-11-05 00:35:24.170 UTC [1] LOG:  database system is ready to accept connections
+2026-11-05 00:35:24.403 UTC [71] FATAL:  database "unifeg" does not exist
+
+## Passo 3 - dados inseridos automaticamente pelo seed
+
+PS> docker exec lab-postgres psql -U unifeg -d lab_sistemas_distribuidos -c "SELECT * FROM alunos;"
+ id |    nome     |   ra    | periodo |         criado_em          
+----+-------------+---------+---------+----------------------------
+  1 | Ana Souza   | 2021001 |       8 | 2026-11-05 00:35:23.872831
+  2 | Bruno Lima  | 2021002 |       8 | 2026-11-05 00:35:23.872831
+  3 | Carla Prado | 2021003 |       8 | 2026-11-05 00:35:23.872831
+(3 rows)
+
+
+## Passo 4 - backup e restauração (comandos do roteiro)
+
+PS> docker exec lab-postgres pg_dump -U unifeg lab_sistemas_distribuidos > backup.sql
+
+PS> Get-Item backup.sql | Select-Object Name, Length
+@{Name=backup.sql; Length=5096}
+
+PS> Get-Content backup.sql | docker exec -i lab-postgres psql -U unifeg -d lab_sistemas_distribuidos
+SET
+SET
+SET
+SET
+SET
+ set_config 
+------------
+ 
+(1 row)
+
+SET
+SET
+SET
+SET
+SET
+SET
+ERROR:  relation "alunos" already exists
+ALTER TABLE
+ERROR:  relation "alunos_id_seq" already exists
+ALTER SEQUENCE
+ALTER SEQUENCE
+ALTER TABLE
+ERROR:  duplicate key value violates unique constraint "alunos_pkey"
+DETAIL:  Key (id)=(1) already exists.
+CONTEXT:  COPY alunos, line 1
+ setval 
+--------
+      3
+(1 row)
+
+ERROR:  multiple primary keys for table "alunos" are not allowed
+ERROR:  relation "alunos_ra_key" already exists
+
+## Passo 4 (extra) - restauração real: apaga a tabela e restaura do backup
+
+PS> docker exec lab-postgres psql -U unifeg -d lab_sistemas_distribuidos -c "DROP TABLE alunos;"
+DROP TABLE
+
+PS> docker exec lab-postgres psql -U unifeg -d lab_sistemas_distribuidos -c "SELECT count(*) FROM alunos;"
+ERROR:  relation "alunos" does not exist
+LINE 1: SELECT count(*) FROM alunos;
+                             ^
+
+PS> Get-Content backup.sql | docker exec -i lab-postgres psql -U unifeg -d lab_sistemas_distribuidos
+SET
+SET
+SET
+SET
+SET
+ set_config 
+------------
+ 
+(1 row)
+
+SET
+SET
+SET
+SET
+SET
+SET
+CREATE TABLE
+ALTER TABLE
+CREATE SEQUENCE
+ALTER SEQUENCE
+ALTER SEQUENCE
+ALTER TABLE
+COPY 3
+ setval 
+--------
+      3
+(1 row)
+
+ALTER TABLE
+ALTER TABLE
+
+PS> docker exec lab-postgres psql -U unifeg -d lab_sistemas_distribuidos -c "SELECT * FROM alunos;"
+ id |    nome     |   ra    | periodo |         criado_em          
+----+-------------+---------+---------+----------------------------
+  1 | Ana Souza   | 2021001 |       8 | 2026-11-05 00:35:23.872831
+  2 | Bruno Lima  | 2021002 |       8 | 2026-11-05 00:35:23.872831
+  3 | Carla Prado | 2021003 |       8 | 2026-11-05 00:35:23.872831
+(3 rows)
+
+
+## Passo 5 - remove o container (não o volume) e recria
+
+PS> docker rm -f lab-postgres
+lab-postgres
+
+PS> docker run -d --name lab-postgres --env-file .env -v pgdata-lab09:/var/lib/postgresql/data -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\09-postgresql\init:/docker-entrypoint-initdb.d:ro" -p 5432:5432 postgres:16-alpine
+a985bda444ab51d3faba0ac0d53b560be2f67ce77b7ecc22d45f7f13da9abf1c
+
+PS> docker exec lab-postgres psql -U unifeg -d lab_sistemas_distribuidos -c "SELECT count(*) FROM alunos;"
+ count 
+-------
+     3
+(1 row)
+
+
+PS> docker logs --tail 5 lab-postgres
+2026-11-05 00:35:30.105 UTC [29] LOG:  redo done at 0/195BF18 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-11-05 00:35:30.116 UTC [27] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-11-05 00:35:30.155 UTC [27] LOG:  checkpoint complete: wrote 52 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.009 s, sync=0.019 s, total=0.042 s; sync files=39, longest=0.004 s, average=0.001 s; distance=196 kB, estimate=196 kB; lsn=0/195C038, redo lsn=0/195C038
+2026-11-05 00:35:30.164 UTC [1] LOG:  database system is ready to accept connections
+2026-11-05 00:35:31.470 UTC [46] FATAL:  database "unifeg" does not exist
+
+## Desafio - init/03-indice.sql (exige volume vazio)
+
+PS> Get-Content init\03-indice.sql
+-- Desafio da PrÃ¡tica 09: Ã­ndice na coluna ra
+CREATE INDEX IF NOT EXISTS idx_alunos_ra ON alunos (ra);
+
+PS> docker rm -f lab-postgres
+lab-postgres
+
+PS> docker volume rm pgdata-lab09
+pgdata-lab09
+
+PS> docker volume create pgdata-lab09
+pgdata-lab09
+
+PS> docker run -d --name lab-postgres --env-file .env -v pgdata-lab09:/var/lib/postgresql/data -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\09-postgresql\init:/docker-entrypoint-initdb.d:ro" -p 5432:5432 postgres:16-alpine
+6e03434fe7b5bebbf78b45fa92f45d9c9ba9d8b227b4e8d693f1f8e72cead01a
+
+PS> docker logs lab-postgres 2>&1 | Select-String '03-indice|CREATE INDEX'
+/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/03-indice.sql
+CREATE INDEX
+
+PS> docker exec lab-postgres psql -U unifeg -d lab_sistemas_distribuidos -c "\d alunos"
+                                        Table "public.alunos"
+  Column   |            Type             | Collation | Nullable |              Default               
+-----------+-----------------------------+-----------+----------+------------------------------------
+ id        | integer                     |           | not null | nextval('alunos_id_seq'::regclass)
+ nome      | character varying(120)      |           | not null | 
+ ra        | character varying(20)       |           | not null | 
+ periodo   | smallint                    |           | not null | 1
+ criado_em | timestamp without time zone |           | not null | now()
+Indexes:
+    "alunos_pkey" PRIMARY KEY, btree (id)
+    "alunos_ra_key" UNIQUE CONSTRAINT, btree (ra)
+    "idx_alunos_ra" btree (ra)
+
+
+## Limpeza (container removido; volume mantido)
+
+PS> docker rm -f lab-postgres
+lab-postgres

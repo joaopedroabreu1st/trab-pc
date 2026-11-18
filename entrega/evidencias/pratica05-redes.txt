@@ -1,0 +1,217 @@
+﻿# pratica05-redes  -  executado em 2026-11-04 21:29:20 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - rede definida pelo usuário + servidor
+
+PS> docker network create rede-lab05
+f0b0a980c6fb1775f4b7645163f4725028118a4f8f444227e4482cacac151215
+
+PS> docker run -d --name servidor --network rede-lab05 nginx:alpine
+Unable to find image 'nginx:alpine' locally
+alpine: Pulling from library/nginx
+7b229517ed22: Already exists
+12b85cff06fd: Pulling fs layer
+657023555a2a: Pulling fs layer
+7cc330898115: Pulling fs layer
+26185d08a3ec: Pulling fs layer
+2ec5fb117ffa: Pulling fs layer
+9b0f7dfe35b2: Pulling fs layer
+b9b388a21ecf: Pulling fs layer
+26185d08a3ec: Waiting
+2ec5fb117ffa: Waiting
+9b0f7dfe35b2: Waiting
+b9b388a21ecf: Waiting
+657023555a2a: Verifying Checksum
+657023555a2a: Download complete
+7cc330898115: Download complete
+26185d08a3ec: Verifying Checksum
+26185d08a3ec: Download complete
+2ec5fb117ffa: Download complete
+12b85cff06fd: Verifying Checksum
+12b85cff06fd: Download complete
+9b0f7dfe35b2: Verifying Checksum
+9b0f7dfe35b2: Download complete
+12b85cff06fd: Pull complete
+657023555a2a: Pull complete
+7cc330898115: Pull complete
+26185d08a3ec: Pull complete
+2ec5fb117ffa: Pull complete
+9b0f7dfe35b2: Pull complete
+b9b388a21ecf: Verifying Checksum
+b9b388a21ecf: Download complete
+b9b388a21ecf: Pull complete
+Digest: sha256:785835ea65db4bba6f021acc0f3be91b0fef76a53fe41f8588c6698d2aed0606
+Status: Downloaded newer image for nginx:alpine
+000ed699bb9990619e1c749b503de763cd4b1da8c07a5890d41f8304a7bd2c94
+
+## Passo 2 - acesso pelo NOME a partir de outro container na mesma rede
+
+PS> docker run --rm --network rede-lab05 busybox wget -qO- http://servidor
+Unable to find image 'busybox:latest' locally
+latest: Pulling from library/busybox
+37bb94b0940b: Pulling fs layer
+37bb94b0940b: Verifying Checksum
+37bb94b0940b: Download complete
+37bb94b0940b: Pull complete
+Digest: sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4
+Status: Downloaded newer image for busybox:latest
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, nginx is successfully installed and working.
+Further configuration is required for the web server, reverse proxy, 
+API gateway, load balancer, content cache, or other features.</p>
+
+<p>For online documentation and support please refer to
+<a href="https://nginx.org/">nginx.org</a>.<br/>
+To engage with the community please visit
+<a href="https://community.nginx.org/">community.nginx.org</a>.<br/>
+For enterprise grade support, professional services, additional 
+security features and capabilities please refer to
+<a href="https://f5.com/nginx">f5.com/nginx</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+## Passo 3 - publicando a porta no host
+
+PS> docker run -d --name servidor-exposto --network rede-lab05 -p 8080:80 nginx:alpine
+5ead97e0c9ea0b2e5d3781bc33ca08f2a75b657fd2b4ac6cd85b8f556472b650
+
+PS> curl.exe -s http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, nginx is successfully installed and working.
+Further configuration is required for the web server, reverse proxy, 
+API gateway, load balancer, content cache, or other features.</p>
+
+<p>For online documentation and support please refer to
+<a href="https://nginx.org/">nginx.org</a>.<br/>
+To engage with the community please visit
+<a href="https://community.nginx.org/">community.nginx.org</a>.<br/>
+For enterprise grade support, professional services, additional 
+security features and capabilities please refer to
+<a href="https://f5.com/nginx">f5.com/nginx</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+## Passo 4 - inspeção da rede e porta publicada
+
+PS> docker network inspect rede-lab05
+[
+    {
+        "Name": "rede-lab05",
+        "Id": "f0b0a980c6fb1775f4b7645163f4725028118a4f8f444227e4482cacac151215",
+        "Created": "2026-11-05T00:29:20.550977654Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Options": {
+            "com.docker.network.enable_ipv4": "true",
+            "com.docker.network.enable_ipv6": "false"
+        },
+        "Labels": {},
+        "Containers": {
+            "000ed699bb9990619e1c749b503de763cd4b1da8c07a5890d41f8304a7bd2c94": {
+                "Name": "servidor",
+                "EndpointID": "fb35555e2d1cf4830764a8bdc285805d465f6714b70704f4594ca96140fc6138",
+                "MacAddress": "a6:e3:e2:8d:a6:bc",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            },
+            "5ead97e0c9ea0b2e5d3781bc33ca08f2a75b657fd2b4ac6cd85b8f556472b650": {
+                "Name": "servidor-exposto",
+                "EndpointID": "561418aab3d63bc90567aa9211b8c51833b3afca3d5434a7542298ccbe11dc7a",
+                "MacAddress": "5a:86:cf:fc:a1:ab",
+                "IPv4Address": "172.18.0.3/16",
+                "IPv6Address": ""
+            }
+        },
+        "Status": {
+            "IPAM": {
+                "Subnets": {
+                    "172.18.0.0/16": {
+                        "IPsInUse": 5,
+                        "DynamicIPsAvailable": 65531
+                    }
+                }
+            }
+        }
+    }
+]
+
+PS> docker port servidor-exposto
+80/tcp -> 0.0.0.0:8080
+80/tcp -> [::]:8080
+
+## Passo 5 - rede bridge padrão (sem DNS por nome)
+
+PS> docker run -d --name servidor-default nginx:alpine
+f067c6d9f8f9e36d70e2912bffe3e592ea8e0ab688ba5d41807d03aeabc7b4af
+
+PS> docker run --rm busybox wget -qO- -T 5 http://servidor-default
+wget: bad address 'servidor-default'
+
+## Desafio - conectar o servidor a uma segunda rede
+
+PS> docker network create rede-lab05-b
+1cbf970260fba8f6dbd073d13875919a8b285f6cf9346df8adb0cfe03f91328d
+
+PS> docker network connect rede-lab05-b servidor
+
+PS> docker inspect --format '{{json .NetworkSettings.Networks}}' servidor
+{"rede-lab05":{"IPAMConfig":null,"Links":null,"Aliases":null,"DriverOpts":null,"GwPriority":0,"NetworkID":"f0b0a980c6fb1775f4b7645163f4725028118a4f8f444227e4482cacac151215","EndpointID":"fb35555e2d1cf4830764a8bdc285805d465f6714b70704f4594ca96140fc6138","Gateway":"172.18.0.1","IPAddress":"172.18.0.2","MacAddress":"a6:e3:e2:8d:a6:bc","IPPrefixLen":16,"IPv6Gateway":"","GlobalIPv6Address":"","GlobalIPv6PrefixLen":0,"DNSNames":["servidor","000ed699bb99"]},"rede-lab05-b":{"IPAMConfig":{},"Links":null,"Aliases":[],"DriverOpts":{},"GwPriority":0,"NetworkID":"1cbf970260fba8f6dbd073d13875919a8b285f6cf9346df8adb0cfe03f91328d","EndpointID":"79cf271f8613970568b2f1410d4158d490d960fc0f48e52a483a4f05cc18dc3a","Gateway":"172.19.0.1","IPAddress":"172.19.0.2","MacAddress":"12:b9:41:d2:03:aa","IPPrefixLen":16,"IPv6Gateway":"","GlobalIPv6Address":"","GlobalIPv6PrefixLen":0,"DNSNames":["servidor","000ed699bb99"]}}
+
+PS> docker network inspect --format '{{.Name}}: {{range .Containers}}{{.Name}} {{end}}' rede-lab05 rede-lab05-b
+rede-lab05: servidor servidor-exposto 
+rede-lab05-b: servidor 
+
+## Limpeza
+
+PS> docker rm -f servidor servidor-exposto servidor-default
+servidor
+servidor-exposto
+servidor-default
+
+PS> docker network rm rede-lab05 rede-lab05-b
+rede-lab05
+rede-lab05-b

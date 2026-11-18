@@ -1,0 +1,257 @@
+﻿# pratica12-react  -  executado em 2026-11-04 21:40:46 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - sobe o ambiente de desenvolvimento
+
+PS> docker compose up -d --build
+ Image lab12-react-stack-react-dev Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 645B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile.dev
+#2 transferring dockerfile: 305B 0.0s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 1.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B 0.0s done
+#4 DONE 0.1s
+
+#5 [1/4] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 466B 0.0s done
+#6 DONE 0.1s
+
+#7 [2/4] WORKDIR /app
+#7 CACHED
+
+#8 [3/4] COPY app-react/package.json ./
+#8 DONE 0.1s
+
+#9 [4/4] RUN npm install
+#9 427.9 
+#9 427.9 added 62 packages in 7m
+#9 427.9 
+#9 427.9 7 packages are looking for funding
+#9 427.9   run `npm fund` for details
+#9 427.9 npm notice
+#9 427.9 npm notice New major version of npm available! 10.8.2 -> 12.2.2
+#9 427.9 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+#9 427.9 npm notice To update run: npm install -g npm@12.2.2
+#9 427.9 npm notice
+#9 DONE 428.1s
+
+#10 exporting to image
+#10 exporting layers
+#10 exporting layers 2.2s done
+#10 writing image sha256:ca8fc5d5ef613f1f9e4e311da4d0c49223946f1057080e8dcfbaf769ae9e4139 done
+#10 naming to docker.io/library/lab12-react-stack-react-dev 0.0s done
+#10 DONE 2.3s
+
+#11 resolving provenance for metadata file
+#11 DONE 0.0s
+ Image lab12-react-stack-react-dev Built 
+ Volume lab12-react-stack_node_modules_dev Creating 
+ Network lab12-react-stack_default Creating 
+ Network lab12-react-stack_default Creating 
+ Volume lab12-react-stack_node_modules_dev Creating 
+ Volume lab12-react-stack_node_modules_dev Created 
+ Volume lab12-react-stack_node_modules_dev Created 
+ Network lab12-react-stack_default Created 
+ Network lab12-react-stack_default Created 
+ Container lab12-react-stack-react-dev-1 Creating 
+ Container lab12-react-stack-react-dev-1 Created 
+ Container lab12-react-stack-react-dev-1 Starting 
+ Container lab12-react-stack-react-dev-1 Started 
+
+PS> docker compose logs react-dev
+react-dev-1  | 
+react-dev-1  | > app-react-lab12@1.0.0 dev
+react-dev-1  | > vite --host 0.0.0.0
+react-dev-1  | 
+react-dev-1  | 
+react-dev-1  |   VITE v5.4.21  ready in 568 ms
+react-dev-1  | 
+react-dev-1  |   ➜  Local:   http://localhost:5173/
+react-dev-1  |   ➜  Network: http://172.18.0.2:5173/
+
+PS> curl.exe -s -o NUL -w "HTTP %{http_code}\n" http://localhost:5173
+HTTP 200
+
+## Passo 2 - edita src/App.jsx no HOST com a página aberta no navegador
+   (arquivo editado: App.jsx - '<h1>Unifeg — React dentro de um container</h1>' -> '<h1>Unifeg — React dentro de um container (hot reload funcionando!)</h1>')
+
+PS> docker compose logs react-dev
+react-dev-1  | 
+react-dev-1  | > app-react-lab12@1.0.0 dev
+react-dev-1  | > vite --host 0.0.0.0
+react-dev-1  | 
+react-dev-1  | 
+react-dev-1  |   VITE v5.4.21  ready in 568 ms
+react-dev-1  | 
+react-dev-1  |   ➜  Local:   http://localhost:5173/
+react-dev-1  |   ➜  Network: http://172.18.0.2:5173/
+react-dev-1  | 12:49:08 AM [vite] hmr update /src/App.jsx
+
+## Passo 3 - o volume anônimo preservou node_modules
+
+PS> docker compose exec -T react-dev sh -c "ls /app/node_modules | wc -l"
+36
+
+PS> docker volume ls --filter name=lab12
+DRIVER    VOLUME NAME
+local     lab12-react-stack_node_modules_dev
+
+## Passo 4 - encerra o ambiente de desenvolvimento
+
+PS> docker compose down
+ Container lab12-react-stack-react-dev-1 Stopping 
+ Container lab12-react-stack-react-dev-1 Stopped 
+ Container lab12-react-stack-react-dev-1 Removing 
+ Container lab12-react-stack-react-dev-1 Removed 
+ Network lab12-react-stack_default Removing 
+ Network lab12-react-stack_default Removed 
+
+## Passo 5 - imagem de produção (multi-stage + Nginx)
+
+PS> docker build -t app-react-lab12:prod .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 380B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/nginx:alpine
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 1.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [build 1/6] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 2.41kB 0.0s done
+#6 DONE 0.1s
+
+#7 [stage-1 1/3] FROM docker.io/library/nginx:alpine
+#7 DONE 0.3s
+
+#8 [build 2/6] WORKDIR /app
+#8 CACHED
+
+#9 [build 3/6] COPY app-react/package.json ./
+#9 CACHED
+
+#10 [build 4/6] RUN npm install
+#10 CACHED
+
+#11 [build 5/6] COPY app-react/ ./
+#11 DONE 0.1s
+
+#12 [build 6/6] RUN npm run build
+#12 0.869 
+#12 0.869 > app-react-lab12@1.0.0 build
+#12 0.869 > vite build
+#12 0.869 
+#12 1.330 vite v5.4.21 building for production...
+#12 1.436 transforming...
+#12 2.950 ✓ 31 modules transformed.
+#12 3.142 rendering chunks...
+#12 3.160 computing gzip size...
+#12 3.173 dist/index.html                   0.34 kB │ gzip:  0.25 kB
+#12 3.174 dist/assets/index-CSHsKEik.css    0.28 kB │ gzip:  0.21 kB
+#12 3.175 dist/assets/index-BjBHktKA.js   143.03 kB │ gzip: 46.01 kB
+#12 3.176 ✓ built in 1.79s
+#12 DONE 3.3s
+
+#13 [stage-1 2/3] COPY --from=build /app/dist /usr/share/nginx/html
+#13 DONE 0.1s
+
+#14 [stage-1 3/3] COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+#14 DONE 0.1s
+
+#15 exporting to image
+#15 exporting layers 0.1s done
+#15 writing image sha256:5c4fc56300deb750971190b73951c05d0365cf869bde9976ce423b34c0c1ed27 done
+#15 naming to docker.io/library/app-react-lab12:prod done
+#15 DONE 0.1s
+
+PS> docker run --rm -d --name react-prod -p 8090:80 app-react-lab12:prod
+582181a855045736a7ceb240ac8513445bec7f5ca9b713d0a15b70b321c7e0ef
+
+PS> curl.exe -s -I http://localhost:8090
+HTTP/1.1 200 OK
+Server: nginx/1.31.8
+Date: Thu, 05 Nov 2026 00:49:33 GMT
+Content-Type: text/html
+Content-Length: 340
+Last-Modified: Thu, 05 Nov 2026 00:49:32 GMT
+Connection: keep-alive
+ETag: "6aebd29c-154"
+Accept-Ranges: bytes
+
+
+PS> docker stop react-prod
+react-prod
+
+## Desafio - imagem alternativa rodando npm run dev em 'produção'
+
+PS> docker build -f Dockerfile.devmode -t app-react-lab12:devmode .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.devmode
+#1 transferring dockerfile: 406B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine
+#2 DONE 0.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 314B done
+#5 DONE 0.0s
+
+#6 [2/6] WORKDIR /app
+#6 CACHED
+
+#7 [3/6] COPY app-react/package.json ./
+#7 CACHED
+
+#8 [4/6] RUN npm install
+#8 CACHED
+
+#9 [5/6] COPY app-react/src ./src
+#9 DONE 0.1s
+
+#10 [6/6] COPY app-react/index.html app-react/vite.config.js ./
+#10 DONE 0.1s
+
+#11 exporting to image
+#11 exporting layers 0.1s done
+#11 writing image sha256:79d767692c4dca7b085b450d7876064900fa21bc06a416bd5de7a5c32c0801cd done
+#11 naming to docker.io/library/app-react-lab12:devmode done
+#11 DONE 0.1s
+
+PS> docker image ls app-react-lab12
+IMAGE                     ID             DISK USAGE   CONTENT SIZE   EXTRA
+app-react-lab12:devmode   79d767692c4d        303MB             0B        
+app-react-lab12:prod      5c4fc56300de       63.1MB             0B        
+
+PS> docker compose down -v
+ Volume lab12-react-stack_node_modules_dev Removing 
+ Volume lab12-react-stack_node_modules_dev Removed 

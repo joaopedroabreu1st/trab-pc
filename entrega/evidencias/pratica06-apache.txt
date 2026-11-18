@@ -1,0 +1,153 @@
+﻿# pratica06-apache  -  executado em 2026-11-04 21:31:59 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - Apache com site e httpd.conf por bind mount
+
+PS> docker run -d --name lab-apache -p 8080:80 -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\06-apache\site:/usr/local/apache2/htdocs" -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\06-apache\conf\httpd.conf:/usr/local/apache2/conf/httpd.conf:ro" httpd:2.4
+Unable to find image 'httpd:2.4' locally
+2.4: Pulling from library/httpd
+6fc242d221a6: Pulling fs layer
+22ce773c1ed1: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+580ce4f97bc3: Pulling fs layer
+4a12aab7af45: Pulling fs layer
+f39e6d442c0c: Pulling fs layer
+580ce4f97bc3: Waiting
+4a12aab7af45: Waiting
+f39e6d442c0c: Waiting
+4f4fb700ef54: Verifying Checksum
+4f4fb700ef54: Download complete
+22ce773c1ed1: Verifying Checksum
+22ce773c1ed1: Download complete
+580ce4f97bc3: Verifying Checksum
+580ce4f97bc3: Download complete
+f39e6d442c0c: Verifying Checksum
+f39e6d442c0c: Download complete
+4a12aab7af45: Verifying Checksum
+4a12aab7af45: Download complete
+6fc242d221a6: Verifying Checksum
+6fc242d221a6: Download complete
+6fc242d221a6: Pull complete
+22ce773c1ed1: Pull complete
+4f4fb700ef54: Pull complete
+580ce4f97bc3: Pull complete
+4a12aab7af45: Pull complete
+f39e6d442c0c: Pull complete
+Digest: sha256:c6b7745aa371570cc8460a9f08c39989583d4aa7bc8e3ed8bd77a492803ea704
+Status: Downloaded newer image for httpd:2.4
+c430769438c4d7c6a1a8c0faf44661e6ed1a4bf781783a43fca7866cf653da33
+
+## Passo 2 - resposta completa com cabeçalhos (procure X-Servido-Por)
+
+PS> curl.exe -s -i http://localhost:8080
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2026 00:32:15 GMT
+Server: Apache/2.4.69 (Unix)
+Last-Modified: Wed, 04 Nov 2026 23:25:55 GMT
+ETag: "209-65f7bb361b0e5"
+Accept-Ranges: bytes
+Content-Length: 521
+X-Servido-Por: Apache-Unifeg-Lab06
+Content-Type: text/html
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Unifeg — Apache em container</title>
+  <link rel="stylesheet" href="estilo.css" />
+</head>
+<body>
+  <main>
+    <h1>Servido pelo Apache HTTP Server</h1>
+    <p>Esta página está em <code>site/</code> no host e foi mapeada por
+       bind mount para <code>/usr/local/apache2/htdocs</code> dentro do container.</p>
+    <p>Edite este arquivo e recarregue a página — não é preciso reconstruir imagem nenhuma.</p>
+  </main>
+</body>
+</html>
+
+## Passo 3 - sintaxe da configuração e logs no formato customizado (tempo=...-us)
+
+PS> docker exec lab-apache httpd -t
+Syntax OK
+
+PS> docker logs lab-apache
+172.17.0.1 - - [05/Nov/2026:00:32:15 +0000] "GET / HTTP/1.1" 200 521 tempo=17425-us
+[Thu Nov 05 00:32:14.803947 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.69 (Unix) configured -- resuming normal operations
+172.17.0.1 - - [05/Nov/2026:00:32:15 +0000] "GET / HTTP/1.1" 200 521 tempo=3572-us
+[Thu Nov 05 00:32:14.804712 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+
+## Passo 4 - editando site/index.html SEM reiniciar o container
+   (arquivo editado: index.html - '<h1>Servido pelo Apache HTTP Server</h1>' -> '<h1>Servido pelo Apache HTTP Server - editado sem reiniciar o container</h1>')
+
+PS> curl.exe -s http://localhost:8080
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Unifeg — Apache em container</title>
+  <link rel="stylesheet" href="estilo.css" />
+</head>
+<body>
+  <main>
+    <h1>Servido pelo Apache HTTP Server - editado sem reiniciar o container</h1>
+    <p>Esta página está em <code>site/</code> no host e foi mapeada por
+       bind mount para <code>/usr/local/apache2/htdocs</code> dentro do container.</p>
+    <p>Edite este arquivo e recarregue a página — não é preciso reconstruir imagem nenhuma.</p>
+  </main>
+</body>
+</html>
+
+PS> docker ps --filter name=lab-apache --format '{{.Names}}  {{.Status}}'
+lab-apache  Up 1 second
+
+## Desafio - segunda página sobre.html (sem reiniciar)
+
+PS> curl.exe -s -i http://localhost:8080/sobre.html
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2026 00:32:16 GMT
+Server: Apache/2.4.69 (Unix)
+Last-Modified: Thu, 05 Nov 2026 00:32:16 GMT
+ETag: W/"153-65f7ca0a5988a"
+Accept-Ranges: bytes
+Content-Length: 339
+X-Servido-Por: Apache-Unifeg-Lab06
+Content-Type: text/html
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sobre — Lab 06</title>
+  <link rel="stylesheet" href="estilo.css" />
+</head>
+<body>
+  <main>
+    <h1>Sobre este laboratório</h1>
+    <p>Segunda página adicionada ao site com o container em execução (Prática 06 — desafio).</p>
+  </main>
+</body>
+</html>
+
+## Desafio - listagem automática de diretórios: antes (Options Indexes) e depois (Options -Indexes)
+
+PS> curl.exe -s -o NUL -w "HTTP %{http_code}\n" http://localhost:8080/arquivos/
+HTTP 200
+   (arquivo editado: httpd.conf - '    Options Indexes FollowSymLinks' -> '    # UNIFEG (desafio): listagem automática de diretórios desativada
+    Options -Indexes +FollowSymLinks')
+
+PS> docker exec lab-apache httpd -t
+Syntax OK
+
+PS> docker exec lab-apache httpd -k graceful
+
+PS> curl.exe -s -o NUL -w "HTTP %{http_code}\n" http://localhost:8080/arquivos/
+HTTP 403
+
+PS> curl.exe -s -o NUL -w "HTTP %{http_code}\n" http://localhost:8080/sobre.html
+HTTP 200
+
+## Limpeza
+
+PS> docker rm -f lab-apache
+lab-apache

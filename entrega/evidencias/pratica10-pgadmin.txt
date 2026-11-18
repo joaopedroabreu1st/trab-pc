@@ -1,0 +1,683 @@
+﻿# pratica10-pgadmin  -  executado em 2026-11-04 21:35:55 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - .env, validação e subida
+
+PS> Copy-Item .env.example .env -Force
+   (.env criado a partir do .env.example; senhas trocadas por senhas geradas - mascaradas nas evidências)
+
+PS> docker compose config
+name: lab10-pgadmin-compose
+services:
+  db:
+    environment:
+      PGADMIN_DEFAULT_EMAIL: professor@unifeg.example.com
+      PGADMIN_DEFAULT_PASSWORD: ********
+      POSTGRES_DB: lab_sistemas_distribuidos
+      POSTGRES_PASSWORD: ********
+      POSTGRES_USER: unifeg
+    image: postgres:16-alpine
+    networks:
+      rede-lab10: null
+    volumes:
+      - type: volume
+        source: pgdata
+        target: /var/lib/postgresql/data
+        volume: {}
+      - type: bind
+        source: C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\10-pgadmin-compose\init
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+        bind: {}
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U unifeg
+      timeout: 5s
+      interval: 5s
+      retries: 5
+  pgadmin:
+    environment:
+      PGADMIN_CONFIG_CHECK_EMAIL_DELIVERABILITY: "False"
+      PGADMIN_DEFAULT_EMAIL: professor@unifeg.example.com
+      PGADMIN_DEFAULT_PASSWORD: ********
+      POSTGRES_DB: lab_sistemas_distribuidos
+      POSTGRES_PASSWORD: ********
+      POSTGRES_USER: unifeg
+    image: dpage/pgadmin4:8
+    networks:
+      rede-lab10: null
+    volumes:
+      - type: volume
+        source: pgadmin_data
+        target: /var/lib/pgadmin
+        volume: {}
+      - type: bind
+        source: C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\10-pgadmin-compose\pgadmin\servers.json
+        target: /pgadmin4/servers.json
+        read_only: true
+        bind: {}
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+    ports:
+      - mode: ingress
+        target: 80
+        published: "8082"
+        protocol: tcp
+networks:
+  rede-lab10:
+    name: lab10-pgadmin-compose_rede-lab10
+    driver: bridge
+volumes:
+  pgadmin_data:
+    name: lab10-pgadmin-compose_pgadmin_data
+  pgdata:
+    name: lab10-pgadmin-compose_pgdata
+
+PS> docker compose up -d
+ Image dpage/pgadmin4:8 Pulling 
+ 38a8310d387e Pulling fs layer 0B
+ 087843ea2956 Pulling fs layer 0B
+ 6db836a75a2d Pulling fs layer 0B
+ 5d0e4706d110 Pulling fs layer 0B
+ 5d0e4706d110 Waiting 0B
+ 31ebcef82521 Pulling fs layer 0B
+ 91551c39a7c3 Pulling fs layer 0B
+ 31ebcef82521 Waiting 0B
+ 210d55276a54 Pulling fs layer 0B
+ 0f3a11d54a10 Pulling fs layer 0B
+ dcd3056dbb91 Pulling fs layer 0B
+ 91551c39a7c3 Waiting 0B
+ 545d1f431f52 Pulling fs layer 0B
+ 210d55276a54 Waiting 0B
+ 48449e1741e8 Pulling fs layer 0B
+ 0f3a11d54a10 Waiting 0B
+ 1213e95defdb Pulling fs layer 0B
+ 55c17a7b26f0 Pulling fs layer 0B
+ 31af12c6548e Pulling fs layer 0B
+ 93a2e5af292e Pulling fs layer 0B
+ 545d1f431f52 Waiting 0B
+ 48449e1741e8 Waiting 0B
+ 1213e95defdb Waiting 0B
+ 55c17a7b26f0 Waiting 0B
+ 31af12c6548e Waiting 0B
+ 609a99bd4f87 Pulling fs layer 0B
+ 609a99bd4f87 Waiting 0B
+ 93a2e5af292e Waiting 0B
+ 38a8310d387e Downloading 48.51kB
+ 38a8310d387e Downloading 196kB
+ 6db836a75a2d Downloading 48.51kB
+ 087843ea2956 Downloading 535.4kB
+ 38a8310d387e Downloading 540kB
+ 6db836a75a2d Downloading 196kB
+ 087843ea2956 Downloading 1.065MB
+ 38a8310d387e Downloading 1.032MB
+ 6db836a75a2d Downloading 392.6kB
+ 38a8310d387e Downloading 1.818MB
+ 6db836a75a2d Downloading 736.6kB
+ 087843ea2956 Downloading 2.146MB
+ 38a8310d387e Downloading 2.85MB
+ 6db836a75a2d Downloading 1.228MB
+ 38a8310d387e Verifying Checksum 0B
+ 38a8310d387e Download complete 0B
+ 38a8310d387e Extracting 65.54kB
+ 087843ea2956 Downloading 3.218MB
+ 6db836a75a2d Downloading 1.523MB
+ 087843ea2956 Downloading 5.344MB
+ 6db836a75a2d Downloading 1.671MB
+ 38a8310d387e Extracting 786.4kB
+ 087843ea2956 Downloading 7.491MB
+ 6db836a75a2d Downloading 1.818MB
+ 5d0e4706d110 Downloading 3.454kB
+ 5d0e4706d110 Downloading 169.1kB
+ 5d0e4706d110 Download complete 0B
+ 087843ea2956 Downloading 9.093MB
+ 38a8310d387e Extracting 1.376MB
+ 6db836a75a2d Downloading 2.31MB
+ 38a8310d387e Extracting 2.884MB
+ 6db836a75a2d Downloading 2.408MB
+ 087843ea2956 Downloading 11.23MB
+ 38a8310d387e Extracting 3.644MB
+ 38a8310d387e Extracting 3.644MB
+ 31ebcef82521 Downloading 15.74kB
+ 31ebcef82521 Downloading 389.4kB
+ 31ebcef82521 Verifying Checksum 0B
+ 31ebcef82521 Download complete 0B
+ 087843ea2956 Downloading 12.84MB
+ 6db836a75a2d Downloading 3.194MB
+ 38a8310d387e Pull complete 0B
+ 087843ea2956 Downloading 15.5MB
+ 6db836a75a2d Downloading 3.342MB
+ 6db836a75a2d Verifying Checksum 0B
+ 6db836a75a2d Download complete 0B
+ 087843ea2956 Downloading 17.63MB
+ 91551c39a7c3 Downloading 3.497kB
+ 91551c39a7c3 Verifying Checksum 0B
+ 91551c39a7c3 Download complete 0B
+ 087843ea2956 Downloading 19.78MB
+ 087843ea2956 Downloading 21.93MB
+ 210d55276a54 Downloading 216B
+ 210d55276a54 Verifying Checksum 0B
+ 210d55276a54 Download complete 0B
+ 087843ea2956 Downloading 24.07MB
+ 0f3a11d54a10 Downloading 98B
+ 0f3a11d54a10 Download complete 0B
+ 087843ea2956 Downloading 26.22MB
+ 087843ea2956 Downloading 28.34MB
+ dcd3056dbb91 Downloading 97.66kB
+ 087843ea2956 Downloading 30.48MB
+ dcd3056dbb91 Downloading 294.3kB
+ 087843ea2956 Downloading 32.61MB
+ dcd3056dbb91 Downloading 392.6kB
+ 087843ea2956 Downloading 35.29MB
+ dcd3056dbb91 Downloading 1.081MB
+ 087843ea2956 Downloading 37.43MB
+ dcd3056dbb91 Downloading 2.457MB
+ dcd3056dbb91 Downloading 4.521MB
+ 087843ea2956 Downloading 37.95MB
+ 545d1f431f52 Downloading 310.7kB
+ dcd3056dbb91 Downloading 6.193MB
+ 087843ea2956 Downloading 39.55MB
+ dcd3056dbb91 Downloading 6.586MB
+ 087843ea2956 Downloading 40.61MB
+ 545d1f431f52 Downloading 621.9kB
+ dcd3056dbb91 Downloading 8.06MB
+ 087843ea2956 Downloading 43.3MB
+ 087843ea2956 Downloading 45.96MB
+ dcd3056dbb91 Downloading 8.355MB
+ dcd3056dbb91 Verifying Checksum 0B
+ dcd3056dbb91 Download complete 0B
+ 087843ea2956 Downloading 48.1MB
+ 545d1f431f52 Downloading 933.2kB
+ 087843ea2956 Downloading 49.69MB
+ 087843ea2956 Downloading 51.82MB
+ 545d1f431f52 Downloading 1.245MB
+ 087843ea2956 Downloading 53.94MB
+ 48449e1741e8 Downloading 205B
+ 48449e1741e8 Verifying Checksum 0B
+ 48449e1741e8 Download complete 0B
+ 087843ea2956 Downloading 56.09MB
+ 087843ea2956 Downloading 58.22MB
+ 545d1f431f52 Downloading 1.556MB
+ 087843ea2956 Downloading 60.37MB
+ 1213e95defdb Downloading 196B
+ 1213e95defdb Verifying Checksum 0B
+ 1213e95defdb Download complete 0B
+ 087843ea2956 Downloading 62.49MB
+ 545d1f431f52 Downloading 1.867MB
+ 087843ea2956 Downloading 64.63MB
+ 087843ea2956 Downloading 66.24MB
+ 545d1f431f52 Downloading 2.178MB
+ 55c17a7b26f0 Downloading 2.851kB
+ 55c17a7b26f0 Download complete 0B
+ 087843ea2956 Downloading 68.38MB
+ 545d1f431f52 Downloading 2.49MB
+ 087843ea2956 Downloading 70.5MB
+ 087843ea2956 Downloading 72.62MB
+ 545d1f431f52 Downloading 2.801MB
+ 087843ea2956 Downloading 75.28MB
+ 31af12c6548e Downloading 783B
+ 31af12c6548e Downloading 783B
+ 31af12c6548e Verifying Checksum 0B
+ 31af12c6548e Download complete 0B
+ 087843ea2956 Downloading 77.97MB
+ 545d1f431f52 Downloading 3.112MB
+ 087843ea2956 Downloading 80.12MB
+ 087843ea2956 Downloading 82.26MB
+ 545d1f431f52 Downloading 3.424MB
+ 087843ea2956 Downloading 84.41MB
+ 93a2e5af292e Downloading 3.498kB
+ 93a2e5af292e Downloading 10.87kB
+ 93a2e5af292e Download complete 0B
+ 087843ea2956 Downloading 86.55MB
+ 087843ea2956 Downloading 88.69MB
+ 545d1f431f52 Downloading 4.046MB
+ 087843ea2956 Downloading 90.82MB
+ 545d1f431f52 Downloading 4.357MB
+ 087843ea2956 Downloading 92.96MB
+ 609a99bd4f87 Downloading 212.3kB
+ 087843ea2956 Downloading 94.55MB
+ 609a99bd4f87 Downloading 1.064MB
+ 545d1f431f52 Downloading 4.669MB
+ 609a99bd4f87 Downloading 2.342MB
+ 087843ea2956 Downloading 96.15MB
+ 545d1f431f52 Downloading 4.98MB
+ 609a99bd4f87 Downloading 4.685MB
+ 545d1f431f52 Downloading 5.291MB
+ 609a99bd4f87 Downloading 7.028MB
+ 087843ea2956 Downloading 96.69MB
+ 545d1f431f52 Downloading 5.603MB
+ 609a99bd4f87 Downloading 7.88MB
+ 087843ea2956 Downloading 98.82MB
+ 545d1f431f52 Downloading 5.914MB
+ 087843ea2956 Download complete 0B
+ 609a99bd4f87 Downloading 8.945MB
+ 545d1f431f52 Downloading 6.225MB
+ 609a99bd4f87 Downloading 11.29MB
+ 609a99bd4f87 Downloading 13.63MB
+ 545d1f431f52 Downloading 6.537MB
+ 087843ea2956 Extracting 557.1kB
+ 609a99bd4f87 Downloading 15.76MB
+ 545d1f431f52 Downloading 6.848MB
+ 609a99bd4f87 Downloading 17.68MB
+ 545d1f431f52 Downloading 7.159MB
+ 087843ea2956 Extracting 1.114MB
+ 609a99bd4f87 Downloading 19.59MB
+ 545d1f431f52 Downloading 7.47MB
+ 087843ea2956 Extracting 2.785MB
+ 609a99bd4f87 Verifying Checksum 0B
+ 609a99bd4f87 Download complete 0B
+ 545d1f431f52 Downloading 7.782MB
+ 087843ea2956 Extracting 5.571MB
+ 545d1f431f52 Downloading 8.093MB
+ 087843ea2956 Extracting 6.128MB
+ 545d1f431f52 Downloading 8.404MB
+ 545d1f431f52 Downloading 8.716MB
+ 545d1f431f52 Downloading 9.027MB
+ 545d1f431f52 Downloading 9.65MB
+ 087843ea2956 Extracting 6.685MB
+ 545d1f431f52 Downloading 10.27MB
+ 545d1f431f52 Downloading 10.89MB
+ 545d1f431f52 Downloading 11.52MB
+ 545d1f431f52 Downloading 12.14MB
+ 087843ea2956 Extracting 7.242MB
+ 545d1f431f52 Downloading 12.76MB
+ 545d1f431f52 Downloading 13.39MB
+ 545d1f431f52 Downloading 14.01MB
+ 545d1f431f52 Downloading 14.63MB
+ 545d1f431f52 Downloading 15.56MB
+ 087843ea2956 Extracting 7.799MB
+ 545d1f431f52 Downloading 16.5MB
+ 545d1f431f52 Downloading 17.43MB
+ 545d1f431f52 Downloading 18.37MB
+ 545d1f431f52 Downloading 19.3MB
+ 545d1f431f52 Downloading 20.23MB
+ 087843ea2956 Extracting 8.356MB
+ 545d1f431f52 Downloading 21.17MB
+ 545d1f431f52 Downloading 22.41MB
+ 545d1f431f52 Downloading 23.35MB
+ 545d1f431f52 Downloading 24.28MB
+ 545d1f431f52 Downloading 25.53MB
+ 087843ea2956 Extracting 8.913MB
+ 545d1f431f52 Downloading 26.77MB
+ 545d1f431f52 Downloading 28.02MB
+ 545d1f431f52 Downloading 29.26MB
+ 545d1f431f52 Downloading 30.82MB
+ 545d1f431f52 Download complete 0B
+ 087843ea2956 Extracting 9.47MB
+ 087843ea2956 Extracting 10.03MB
+ 087843ea2956 Extracting 10.58MB
+ 087843ea2956 Extracting 11.14MB
+ 087843ea2956 Extracting 11.7MB
+ 087843ea2956 Extracting 12.26MB
+ 087843ea2956 Extracting 12.81MB
+ 087843ea2956 Extracting 13.37MB
+ 087843ea2956 Extracting 13.93MB
+ 087843ea2956 Extracting 14.48MB
+ 087843ea2956 Extracting 15.04MB
+ 087843ea2956 Extracting 15.6MB
+ 087843ea2956 Extracting 16.15MB
+ 087843ea2956 Extracting 16.71MB
+ 087843ea2956 Extracting 17.83MB
+ 087843ea2956 Extracting 18.38MB
+ 087843ea2956 Extracting 18.94MB
+ 087843ea2956 Extracting 20.05MB
+ 087843ea2956 Extracting 20.61MB
+ 087843ea2956 Extracting 21.17MB
+ 087843ea2956 Extracting 21.73MB
+ 087843ea2956 Extracting 22.28MB
+ 087843ea2956 Extracting 22.84MB
+ 087843ea2956 Extracting 23.95MB
+ 087843ea2956 Extracting 25.07MB
+ 087843ea2956 Extracting 25.62MB
+ 087843ea2956 Extracting 26.74MB
+ 087843ea2956 Extracting 27.3MB
+ 087843ea2956 Extracting 27.85MB
+ 087843ea2956 Extracting 28.41MB
+ 087843ea2956 Extracting 28.97MB
+ 087843ea2956 Extracting 29.52MB
+ 087843ea2956 Extracting 30.64MB
+ 087843ea2956 Extracting 31.2MB
+ 087843ea2956 Extracting 31.75MB
+ 087843ea2956 Extracting 32.31MB
+ 087843ea2956 Extracting 32.87MB
+ 087843ea2956 Extracting 33.42MB
+ 087843ea2956 Extracting 33.98MB
+ 087843ea2956 Extracting 34.54MB
+ 087843ea2956 Extracting 35.09MB
+ 087843ea2956 Extracting 35.65MB
+ 087843ea2956 Extracting 36.21MB
+ 087843ea2956 Extracting 36.77MB
+ 087843ea2956 Extracting 37.32MB
+ 087843ea2956 Extracting 37.88MB
+ 087843ea2956 Extracting 38.44MB
+ 087843ea2956 Extracting 38.99MB
+ 087843ea2956 Extracting 39.55MB
+ 087843ea2956 Extracting 40.11MB
+ 087843ea2956 Extracting 43.45MB
+ 087843ea2956 Extracting 44.01MB
+ 087843ea2956 Extracting 44.56MB
+ 087843ea2956 Extracting 45.12MB
+ 087843ea2956 Extracting 45.68MB
+ 087843ea2956 Extracting 46.24MB
+ 087843ea2956 Extracting 46.79MB
+ 087843ea2956 Extracting 47.35MB
+ 087843ea2956 Extracting 47.91MB
+ 087843ea2956 Extracting 49.02MB
+ 087843ea2956 Extracting 49.58MB
+ 087843ea2956 Extracting 50.14MB
+ 087843ea2956 Extracting 50.69MB
+ 087843ea2956 Extracting 51.25MB
+ 087843ea2956 Extracting 51.81MB
+ 087843ea2956 Extracting 52.92MB
+ 087843ea2956 Extracting 54.03MB
+ 087843ea2956 Extracting 55.15MB
+ 087843ea2956 Extracting 55.71MB
+ 087843ea2956 Extracting 56.26MB
+ 087843ea2956 Extracting 56.82MB
+ 087843ea2956 Extracting 57.38MB
+ 087843ea2956 Extracting 57.93MB
+ 087843ea2956 Extracting 58.49MB
+ 087843ea2956 Extracting 59.05MB
+ 087843ea2956 Extracting 60.16MB
+ 087843ea2956 Extracting 60.72MB
+ 087843ea2956 Extracting 61.83MB
+ 087843ea2956 Extracting 64.06MB
+ 087843ea2956 Extracting 65.73MB
+ 087843ea2956 Extracting 66.85MB
+ 087843ea2956 Extracting 67.4MB
+ 087843ea2956 Extracting 67.96MB
+ 087843ea2956 Extracting 68.52MB
+ 087843ea2956 Extracting 69.07MB
+ 087843ea2956 Extracting 69.63MB
+ 087843ea2956 Extracting 70.19MB
+ 087843ea2956 Extracting 71.3MB
+ 087843ea2956 Extracting 71.86MB
+ 087843ea2956 Extracting 72.42MB
+ 087843ea2956 Extracting 72.97MB
+ 087843ea2956 Extracting 75.76MB
+ 087843ea2956 Extracting 76.32MB
+ 087843ea2956 Extracting 76.87MB
+ 087843ea2956 Extracting 77.43MB
+ 087843ea2956 Extracting 79.1MB
+ 087843ea2956 Extracting 80.22MB
+ 087843ea2956 Extracting 80.77MB
+ 087843ea2956 Extracting 81.33MB
+ 087843ea2956 Extracting 81.89MB
+ 087843ea2956 Extracting 82.44MB
+ 087843ea2956 Extracting 83MB
+ 087843ea2956 Extracting 83.56MB
+ 087843ea2956 Extracting 84.12MB
+ 087843ea2956 Extracting 84.67MB
+ 087843ea2956 Extracting 85.23MB
+ 087843ea2956 Extracting 85.79MB
+ 087843ea2956 Extracting 86.34MB
+ 087843ea2956 Extracting 86.9MB
+ 087843ea2956 Extracting 87.46MB
+ 087843ea2956 Extracting 88.01MB
+ 087843ea2956 Extracting 89.69MB
+ 087843ea2956 Extracting 90.24MB
+ 087843ea2956 Extracting 90.8MB
+ 087843ea2956 Extracting 91.36MB
+ 087843ea2956 Extracting 92.47MB
+ 087843ea2956 Extracting 93.59MB
+ 087843ea2956 Extracting 94.14MB
+ 087843ea2956 Extracting 94.7MB
+ 087843ea2956 Extracting 95.26MB
+ 087843ea2956 Extracting 95.81MB
+ 087843ea2956 Extracting 96.37MB
+ 087843ea2956 Extracting 100.3MB
+ 087843ea2956 Extracting 101.2MB
+ 087843ea2956 Pull complete 0B
+ 6db836a75a2d Extracting 65.54kB
+ 6db836a75a2d Extracting 2.228MB
+ 6db836a75a2d Extracting 3.816MB
+ 6db836a75a2d Pull complete 0B
+ 5d0e4706d110 Extracting 32.77kB
+ 5d0e4706d110 Extracting 169.1kB
+ 5d0e4706d110 Extracting 169.1kB
+ 5d0e4706d110 Pull complete 0B
+ 31ebcef82521 Extracting 32.77kB
+ 31ebcef82521 Extracting 389.4kB
+ 31ebcef82521 Extracting 389.4kB
+ 31ebcef82521 Pull complete 0B
+ 91551c39a7c3 Extracting 32.77kB
+ 91551c39a7c3 Extracting 65.55kB
+ 91551c39a7c3 Pull complete 0B
+ 210d55276a54 Extracting 216B
+ 210d55276a54 Extracting 216B
+ 210d55276a54 Pull complete 0B
+ 0f3a11d54a10 Extracting 98B
+ 0f3a11d54a10 Extracting 98B
+ 0f3a11d54a10 Pull complete 0B
+ dcd3056dbb91 Extracting 98.3kB
+ dcd3056dbb91 Extracting 294.9kB
+ dcd3056dbb91 Extracting 393.2kB
+ dcd3056dbb91 Extracting 491.5kB
+ dcd3056dbb91 Extracting 589.8kB
+ dcd3056dbb91 Extracting 688.1kB
+ dcd3056dbb91 Extracting 786.4kB
+ dcd3056dbb91 Extracting 884.7kB
+ dcd3056dbb91 Extracting 983kB
+ dcd3056dbb91 Extracting 1.081MB
+ dcd3056dbb91 Extracting 1.18MB
+ dcd3056dbb91 Extracting 1.278MB
+ dcd3056dbb91 Extracting 1.376MB
+ dcd3056dbb91 Extracting 2.654MB
+ dcd3056dbb91 Extracting 2.753MB
+ dcd3056dbb91 Extracting 4.817MB
+ dcd3056dbb91 Extracting 6.39MB
+ dcd3056dbb91 Extracting 7.569MB
+ dcd3056dbb91 Extracting 7.668MB
+ dcd3056dbb91 Extracting 7.864MB
+ dcd3056dbb91 Extracting 8.847MB
+ dcd3056dbb91 Extracting 8.877MB
+ dcd3056dbb91 Pull complete 0B
+ 545d1f431f52 Extracting 327.7kB
+ 545d1f431f52 Extracting 4.26MB
+ 545d1f431f52 Extracting 8.192MB
+ 545d1f431f52 Extracting 11.14MB
+ 545d1f431f52 Extracting 14.42MB
+ 545d1f431f52 Extracting 17.69MB
+ 545d1f431f52 Extracting 20.97MB
+ 545d1f431f52 Extracting 23.27MB
+ 545d1f431f52 Extracting 25.89MB
+ 545d1f431f52 Extracting 29.16MB
+ 545d1f431f52 Extracting 30.8MB
+ 545d1f431f52 Extracting 30.98MB
+ 545d1f431f52 Pull complete 0B
+ 48449e1741e8 Extracting 205B
+ 48449e1741e8 Extracting 205B
+ 48449e1741e8 Pull complete 0B
+ 1213e95defdb Extracting 196B
+ 1213e95defdb Extracting 196B
+ 1213e95defdb Pull complete 0B
+ 55c17a7b26f0 Extracting 2.851kB
+ 55c17a7b26f0 Extracting 2.851kB
+ 55c17a7b26f0 Pull complete 0B
+ 31af12c6548e Extracting 783B
+ 31af12c6548e Extracting 783B
+ 31af12c6548e Pull complete 0B
+ 93a2e5af292e Extracting 10.87kB
+ 93a2e5af292e Extracting 10.87kB
+ 93a2e5af292e Pull complete 0B
+ 609a99bd4f87 Extracting 229.4kB
+ 609a99bd4f87 Extracting 688.1kB
+ 609a99bd4f87 Extracting 1.376MB
+ 609a99bd4f87 Extracting 2.523MB
+ 609a99bd4f87 Extracting 4.588MB
+ 609a99bd4f87 Extracting 6.652MB
+ 609a99bd4f87 Extracting 7.34MB
+ 609a99bd4f87 Extracting 8.946MB
+ 609a99bd4f87 Extracting 10.09MB
+ 609a99bd4f87 Extracting 10.55MB
+ 609a99bd4f87 Extracting 12.62MB
+ 609a99bd4f87 Extracting 13.99MB
+ 609a99bd4f87 Extracting 14.68MB
+ 609a99bd4f87 Extracting 15.14MB
+ 609a99bd4f87 Extracting 15.6MB
+ 609a99bd4f87 Extracting 16.29MB
+ 609a99bd4f87 Extracting 16.52MB
+ 609a99bd4f87 Extracting 16.74MB
+ 609a99bd4f87 Extracting 16.97MB
+ 609a99bd4f87 Extracting 17.2MB
+ 609a99bd4f87 Extracting 17.43MB
+ 609a99bd4f87 Extracting 17.66MB
+ 609a99bd4f87 Extracting 17.89MB
+ 609a99bd4f87 Extracting 18.35MB
+ 609a99bd4f87 Extracting 18.81MB
+ 609a99bd4f87 Extracting 19.73MB
+ 609a99bd4f87 Extracting 21.22MB
+ 609a99bd4f87 Pull complete 0B
+ Image dpage/pgadmin4:8 Pulled 
+ Network lab10-pgadmin-compose_rede-lab10 Creating 
+ Volume lab10-pgadmin-compose_pgdata Creating 
+ Volume lab10-pgadmin-compose_pgadmin_data Creating 
+ Volume lab10-pgadmin-compose_pgdata Creating 
+ Volume lab10-pgadmin-compose_pgadmin_data Creating 
+ Network lab10-pgadmin-compose_rede-lab10 Creating 
+ Volume lab10-pgadmin-compose_pgadmin_data Created 
+ Volume lab10-pgadmin-compose_pgadmin_data Created 
+ Volume lab10-pgadmin-compose_pgdata Created 
+ Volume lab10-pgadmin-compose_pgdata Created 
+ Network lab10-pgadmin-compose_rede-lab10 Created 
+ Network lab10-pgadmin-compose_rede-lab10 Created 
+ Container lab10-pgadmin-compose-db-1 Creating 
+ Container lab10-pgadmin-compose-db-1 Created 
+ Container lab10-pgadmin-compose-pgadmin-1 Creating 
+ Container lab10-pgadmin-compose-pgadmin-1 Created 
+ Container lab10-pgadmin-compose-db-1 Starting 
+ Container lab10-pgadmin-compose-db-1 Started 
+ Container lab10-pgadmin-compose-db-1 Waiting 
+ Container lab10-pgadmin-compose-db-1 Healthy 
+ Container lab10-pgadmin-compose-pgadmin-1 Starting 
+ Container lab10-pgadmin-compose-pgadmin-1 Started 
+
+## Passo 2 - healthcheck do banco antes do pgAdmin (logo após o up)
+
+PS> docker compose ps -a
+NAME                              IMAGE                COMMAND                  SERVICE   CREATED         STATUS                   PORTS
+lab10-pgadmin-compose-db-1        postgres:16-alpine   "docker-entrypoint.s…"   db        8 seconds ago   Up 7 seconds (healthy)   5432/tcp
+lab10-pgadmin-compose-pgadmin-1   dpage/pgadmin4:8     "/entrypoint.sh"         pgadmin   7 seconds ago   Up 1 second              0.0.0.0:8082->80/tcp, [::]:8082->80/tcp
+
+PS> docker compose ps
+NAME                              IMAGE                COMMAND                  SERVICE   CREATED          STATUS                    PORTS
+lab10-pgadmin-compose-db-1        postgres:16-alpine   "docker-entrypoint.s…"   db        48 seconds ago   Up 46 seconds (healthy)   5432/tcp
+lab10-pgadmin-compose-pgadmin-1   dpage/pgadmin4:8     "/entrypoint.sh"         pgadmin   47 seconds ago   Up 41 seconds             0.0.0.0:8082->80/tcp, [::]:8082->80/tcp
+
+PS> docker compose logs pgadmin
+pgadmin-1  | email config is {'CHECK_EMAIL_DELIVERABILITY': False, 'ALLOW_SPECIAL_EMAIL_DOMAINS': []}
+pgadmin-1  | NOTE: Configuring authentication for SERVER mode.
+pgadmin-1  | 
+pgadmin-1  | pgAdmin 4 - Application Initialisation
+pgadmin-1  | ======================================
+pgadmin-1  | 
+pgadmin-1  | ----------
+pgadmin-1  | Loading servers with:
+pgadmin-1  | User: professor@unifeg.example.com
+pgadmin-1  | SQLite pgAdmin config: /var/lib/pgadmin/pgadmin4.db
+pgadmin-1  | ----------
+pgadmin-1  | Added 1 Server Group(s) and 1 Server(s).
+pgadmin-1  | postfix/postlog: starting the Postfix mail system
+pgadmin-1  | [2026-11-05 00:37:39 +0000] [1] [INFO] Starting gunicorn 22.0.0
+pgadmin-1  | [2026-11-05 00:37:39 +0000] [1] [INFO] Listening at: http://[::]:80 (1)
+pgadmin-1  | [2026-11-05 00:37:39 +0000] [1] [INFO] Using worker: gthread
+pgadmin-1  | [2026-11-05 00:37:39 +0000] [126] [INFO] Booting worker with pid: 126
+
+PS> curl.exe -s -o NUL -w "HTTP %{http_code}\n" http://localhost:8082/login
+HTTP 200
+
+## Consulta equivalente via psql dentro do serviço db (mesma rede do pgAdmin)
+
+PS> docker compose exec -T db psql -U unifeg -d lab_sistemas_distribuidos -c "SELECT * FROM alunos;"
+ id |    nome     |   ra    | periodo |         criado_em          
+----+-------------+---------+---------+----------------------------
+  1 | Ana Souza   | 2021001 |       8 | 2026-11-05 00:36:56.297869
+  2 | Bruno Lima  | 2021002 |       8 | 2026-11-05 00:36:56.297869
+  3 | Carla Prado | 2021003 |       8 | 2026-11-05 00:36:56.297869
+(3 rows)
+
+
+## Passo 3 - pgAdmin pelo navegador (http://localhost:8082) - descrição do print pratica10-pgadmin-consulta.jpg
+Login com PGADMIN_DEFAULT_EMAIL / PGADMIN_DEFAULT_PASSWORD do .env. Na árvore à esquerda apareceu o grupo
+"Unifeg (1)" com o servidor pré-cadastrado "Lab 10 - Postgres via Compose" (vindo do servers.json).
+Ao clicar nele o pgAdmin pediu a senha do usuário 'unifeg' (POSTGRES_PASSWORD) -> "Server connected".
+Databases (2): lab_sistemas_distribuidos e postgres. Query Tool em lab_sistemas_distribuidos:
+  SELECT id, nome, ra, periodo, criado_em FROM alunos ORDER BY id;
+Resultado (Data Output): "Successfully run. Total query runtime: 327 msec. 3 rows affected."
+  id | nome        | ra      | periodo
+   1 | Ana Souza   | 2021001 | 8
+   2 | Bruno Lima  | 2021002 | 8
+   3 | Carla Prado | 2021003 | 8
+
+## Pergunta 3 - dados sobrevivem a down (sem -v)? Insere um aluno, derruba e sobe de novo
+
+PS> docker compose exec -T db psql -U unifeg -d lab_sistemas_distribuidos -c "INSERT INTO alunos (nome, ra, periodo) VALUES ('Teste Persistencia', '2021099', 8);"
+INSERT 0 1
+
+## Passo 4 - encerra preservando os dados
+
+PS> docker compose down
+ Container lab10-pgadmin-compose-pgadmin-1 Stopping 
+ Container lab10-pgadmin-compose-pgadmin-1 Stopped 
+ Container lab10-pgadmin-compose-pgadmin-1 Removing 
+ Container lab10-pgadmin-compose-pgadmin-1 Removed 
+ Container lab10-pgadmin-compose-db-1 Stopping 
+ Container lab10-pgadmin-compose-db-1 Stopped 
+ Container lab10-pgadmin-compose-db-1 Removing 
+ Container lab10-pgadmin-compose-db-1 Removed 
+ Network lab10-pgadmin-compose_rede-lab10 Removing 
+ Network lab10-pgadmin-compose_rede-lab10 Removed 
+
+PS> docker volume ls --filter name=lab10
+DRIVER    VOLUME NAME
+local     lab10-pgadmin-compose_pgadmin_data
+local     lab10-pgadmin-compose_pgdata
+
+PS> docker compose up -d
+ Network lab10-pgadmin-compose_rede-lab10 Creating 
+ Network lab10-pgadmin-compose_rede-lab10 Creating 
+ Network lab10-pgadmin-compose_rede-lab10 Created 
+ Network lab10-pgadmin-compose_rede-lab10 Created 
+ Container lab10-pgadmin-compose-db-1 Creating 
+ Container lab10-pgadmin-compose-db-1 Created 
+ Container lab10-pgadmin-compose-pgadmin-1 Creating 
+ Container lab10-pgadmin-compose-pgadmin-1 Created 
+ Container lab10-pgadmin-compose-db-1 Starting 
+ Container lab10-pgadmin-compose-db-1 Started 
+ Container lab10-pgadmin-compose-db-1 Waiting 
+ Container lab10-pgadmin-compose-db-1 Healthy 
+ Container lab10-pgadmin-compose-pgadmin-1 Starting 
+ Container lab10-pgadmin-compose-pgadmin-1 Started 
+
+PS> docker compose exec -T db psql -U unifeg -d lab_sistemas_distribuidos -c "SELECT * FROM alunos;"
+ id |        nome        |   ra    | periodo |         criado_em          
+----+--------------------+---------+---------+----------------------------
+  1 | Ana Souza          | 2021001 |       8 | 2026-11-05 00:36:56.297869
+  2 | Bruno Lima         | 2021002 |       8 | 2026-11-05 00:36:56.297869
+  3 | Carla Prado        | 2021003 |       8 | 2026-11-05 00:36:56.297869
+  4 | Teste Persistencia | 2021099 |       8 | 2026-11-05 00:40:18.053155
+(4 rows)
+
+
+## Passo 4 - encerra removendo tudo (inclusive volumes)
+
+PS> docker compose down -v
+ Container lab10-pgadmin-compose-pgadmin-1 Stopping 
+ Container lab10-pgadmin-compose-pgadmin-1 Stopped 
+ Container lab10-pgadmin-compose-pgadmin-1 Removing 
+ Container lab10-pgadmin-compose-pgadmin-1 Removed 
+ Container lab10-pgadmin-compose-db-1 Stopping 
+ Container lab10-pgadmin-compose-db-1 Stopped 
+ Container lab10-pgadmin-compose-db-1 Removing 
+ Container lab10-pgadmin-compose-db-1 Removed 
+ Volume lab10-pgadmin-compose_pgdata Removing 
+ Network lab10-pgadmin-compose_rede-lab10 Removing 
+ Volume lab10-pgadmin-compose_pgadmin_data Removing 
+ Volume lab10-pgadmin-compose_pgdata Removed 
+ Volume lab10-pgadmin-compose_pgadmin_data Removed 
+ Network lab10-pgadmin-compose_rede-lab10 Removed 
+
+PS> docker volume ls --filter name=lab10
+DRIVER    VOLUME NAME

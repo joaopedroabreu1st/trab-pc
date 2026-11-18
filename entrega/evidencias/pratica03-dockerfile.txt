@@ -1,0 +1,292 @@
+﻿# pratica03-dockerfile  -  executado em 2026-11-04 21:28:27 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - build da imagem
+
+PS> docker build -t app-fundamentos:1.0 .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 379B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine
+#2 DONE 3.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 72B 0.0s done
+#3 DONE 0.1s
+
+#4 [1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#4 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#4 ...
+
+#5 [internal] load build context
+#5 transferring context: 938B 0.1s done
+#5 DONE 0.1s
+
+#4 [1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#4 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.0s done
+#4 sha256:b2cbbfe903b0821005780971ddc5892edcc4ce74c5a48d82e1d2b382edac3122 0B / 1.26MB 0.1s
+#4 sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 7.67kB / 7.67kB done
+#4 sha256:afdf98210b07b586eb71fa22ba2e432e058e4cd1304d31ed60888755b8c865fb 1.72kB / 1.72kB done
+#4 sha256:11cedc39e663e7c5d5cb9cc77a461a0d2adc25537b94e6831a6108f09cb2001b 6.52kB / 6.52kB done
+#4 sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 0B / 3.86MB 0.1s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 0B / 43.23MB 0.1s
+#4 sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 1.05MB / 3.86MB 0.9s
+#4 sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 3.15MB / 3.86MB 1.0s
+#4 extracting sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb
+#4 sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 3.86MB / 3.86MB 1.0s done
+#4 sha256:fff4e2c1b189bf87d63ad8bd07f7f4eb288d6f2b6a07a8bb44c60e8c075d2096 0B / 445B 1.2s
+#4 sha256:b2cbbfe903b0821005780971ddc5892edcc4ce74c5a48d82e1d2b382edac3122 1.26MB / 1.26MB 1.4s done
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 4.19MB / 43.23MB 1.4s
+#4 sha256:fff4e2c1b189bf87d63ad8bd07f7f4eb288d6f2b6a07a8bb44c60e8c075d2096 445B / 445B 1.4s done
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 9.44MB / 43.23MB 1.7s
+#4 extracting sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 0.6s done
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 13.63MB / 43.23MB 1.9s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 18.87MB / 43.23MB 2.2s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 23.07MB / 43.23MB 2.4s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 28.31MB / 43.23MB 2.7s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 31.46MB / 43.23MB 2.9s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 35.65MB / 43.23MB 3.1s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 38.80MB / 43.23MB 3.3s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 43.23MB / 43.23MB 3.5s
+#4 sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 43.23MB / 43.23MB 3.5s done
+#4 extracting sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287
+#4 extracting sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 5.0s
+#4 extracting sha256:4feea04c154301db6f4a496efa397b3db96603b1c009c797cfdde77bea8b3287 6.4s done
+#4 extracting sha256:b2cbbfe903b0821005780971ddc5892edcc4ce74c5a48d82e1d2b382edac3122
+#4 extracting sha256:b2cbbfe903b0821005780971ddc5892edcc4ce74c5a48d82e1d2b382edac3122 0.1s done
+#4 extracting sha256:fff4e2c1b189bf87d63ad8bd07f7f4eb288d6f2b6a07a8bb44c60e8c075d2096 done
+#4 DONE 10.9s
+
+#6 [2/5] WORKDIR /app
+#6 DONE 0.1s
+
+#7 [3/5] COPY app/package.json ./
+#7 DONE 0.1s
+
+#8 [4/5] RUN npm install --omit=dev
+#8 1.254 
+#8 1.254 up to date, audited 1 package in 770ms
+#8 1.258 
+#8 1.258 found 0 vulnerabilities
+#8 DONE 1.4s
+
+#9 [5/5] COPY app/server.js ./
+#9 DONE 0.1s
+
+#10 exporting to image
+#10 exporting layers 0.1s done
+#10 writing image sha256:d34ade1fa1b651b6635059c8e8aaae18f5f4dd32cbe0e96e80904fec9005eece done
+#10 naming to docker.io/library/app-fundamentos:1.0 done
+#10 DONE 0.1s
+
+## Passo 2 - executa e testa (container em segundo plano para testar no mesmo terminal)
+
+PS> docker run --rm -d --name app03 -p 3000:3000 app-fundamentos:1.0
+71fa1d8232c5f91f6572865501de67ad3b29c51c864a33be5b256956e4dad40a
+
+PS> curl.exe -s http://localhost:3000
+{
+  "mensagem": "Ola, Unifeg! Servidor rodando dentro de um container.",
+  "hostname": "71fa1d8232c5",
+  "plataforma": "linux",
+  "versaoNode": "v20.20.2"
+}
+
+PS> docker logs app03
+Servidor ouvindo na porta 3000
+
+PS> docker stop app03
+app03
+
+## Passo 3a - rebuild SEM alterar nada (observe CACHED)
+
+PS> docker build -t app-fundamentos:1.0 .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 379B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine
+#2 DONE 0.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 72B 0.0s done
+#3 DONE 0.0s
+
+#4 [1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 94B 0.0s done
+#5 DONE 0.0s
+
+#6 [2/5] WORKDIR /app
+#6 CACHED
+
+#7 [3/5] COPY app/package.json ./
+#7 CACHED
+
+#8 [4/5] RUN npm install --omit=dev
+#8 CACHED
+
+#9 [5/5] COPY app/server.js ./
+#9 CACHED
+
+#10 exporting to image
+#10 exporting layers done
+#10 writing image sha256:d34ade1fa1b651b6635059c8e8aaae18f5f4dd32cbe0e96e80904fec9005eece done
+#10 naming to docker.io/library/app-fundamentos:1.0
+#10 naming to docker.io/library/app-fundamentos:1.0 done
+#10 DONE 0.0s
+
+## Passo 3b - alterando a mensagem em app/server.js e rebuild
+   (arquivo editado: server.js - 'Ola, Unifeg! Servidor rodando dentro de um container.' -> 'Ola, Unifeg! Mensagem alterada para testar o cache de build.')
+
+PS> docker build -t app-fundamentos:1.0 .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 379B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine
+#2 DONE 0.4s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 72B 0.0s done
+#3 DONE 0.0s
+
+#4 [1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 691B 0.0s done
+#5 DONE 0.0s
+
+#6 [2/5] WORKDIR /app
+#6 CACHED
+
+#7 [3/5] COPY app/package.json ./
+#7 CACHED
+
+#8 [4/5] RUN npm install --omit=dev
+#8 CACHED
+
+#9 [5/5] COPY app/server.js ./
+#9 DONE 0.1s
+
+#10 exporting to image
+#10 exporting layers 0.0s done
+#10 writing image sha256:7e6af3206a43130f4b2c851a44f4af2f27c33c00cc35dfda7bf1a9594f8d7679 done
+#10 naming to docker.io/library/app-fundamentos:1.0 done
+#10 DONE 0.1s
+
+## Passo 4 - camadas e tamanho
+
+PS> docker image history app-fundamentos:1.0
+IMAGE          CREATED                  CREATED BY                                      SIZE      COMMENT
+7e6af3206a43   Less than a second ago   CMD ["node" "server.js"]                        0B        buildkit.dockerfile.v0
+<missing>      Less than a second ago   EXPOSE [3000/tcp]                               0B        buildkit.dockerfile.v0
+<missing>      Less than a second ago   ENV PORTA=3000                                  0B        buildkit.dockerfile.v0
+<missing>      Less than a second ago   COPY app/server.js ./ # buildkit                586B      buildkit.dockerfile.v0
+<missing>      9 seconds ago            RUN /bin/sh -c npm install --omit=dev # buil…   1.07kB    buildkit.dockerfile.v0
+<missing>      10 seconds ago           COPY app/package.json ./ # buildkit             243B      buildkit.dockerfile.v0
+<missing>      10 seconds ago           WORKDIR /app                                    0B        buildkit.dockerfile.v0
+<missing>      6 months ago             CMD ["node"]                                    0B        buildkit.dockerfile.v0
+<missing>      6 months ago             ENTRYPOINT ["docker-entrypoint.sh"]             0B        buildkit.dockerfile.v0
+<missing>      6 months ago             COPY docker-entrypoint.sh /usr/local/bin/ # …   388B      buildkit.dockerfile.v0
+<missing>      6 months ago             RUN /bin/sh -c apk add --no-cache --virtual …   5.36MB    buildkit.dockerfile.v0
+<missing>      6 months ago             ENV YARN_VERSION=1.22.22                        0B        buildkit.dockerfile.v0
+<missing>      6 months ago             RUN /bin/sh -c addgroup -g 1000 node     && …   122MB     buildkit.dockerfile.v0
+<missing>      6 months ago             ENV NODE_VERSION=20.20.2                        0B        buildkit.dockerfile.v0
+<missing>      6 months ago             CMD ["/bin/sh"]                                 0B        buildkit.dockerfile.v0
+<missing>      6 months ago             ADD alpine-minirootfs-3.23.4-x86_64.tar.gz /…   8.45MB    buildkit.dockerfile.v0
+
+PS> docker image ls app-fundamentos
+IMAGE                 ID             DISK USAGE   CONTENT SIZE   EXTRA
+app-fundamentos:1.0   7e6af3206a43        136MB             0B        
+
+## Desafio - HEALTHCHECK no Dockerfile
+   (arquivo editado: Dockerfile - 'CMD ["node", "server.js"]' -> '# Desafio: confirma que a rota / responde HTTP 200
+HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -q --spider http://localhost:3000/ || exit 1
+
+CMD ["node", "server.js"]')
+
+PS> Get-Content Dockerfile
+# PrÃ¡tica 03 â€” primeira imagem prÃ³pria
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copiado antes do restante do cÃ³digo para aproveitar o cache de camadas:
+# sÃ³ reinstala dependÃªncias quando package.json mudar.
+COPY app/package.json ./
+RUN npm install --omit=dev
+
+COPY app/server.js ./
+
+ENV PORTA=3000
+EXPOSE 3000
+
+# Desafio: confirma que a rota / responde HTTP 200
+HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -q --spider http://localhost:3000/ || exit 1
+
+CMD ["node", "server.js"]
+
+PS> docker build -t app-fundamentos:1.1 .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 558B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine
+#2 DONE 0.4s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 72B 0.0s done
+#3 DONE 0.0s
+
+#4 [1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 94B 0.0s done
+#5 DONE 0.0s
+
+#6 [2/5] WORKDIR /app
+#6 CACHED
+
+#7 [3/5] COPY app/package.json ./
+#7 CACHED
+
+#8 [4/5] RUN npm install --omit=dev
+#8 CACHED
+
+#9 [5/5] COPY app/server.js ./
+#9 CACHED
+
+#10 exporting to image
+#10 exporting layers done
+#10 writing image sha256:f83cdd23d2c24add7bec1c5349980cdc141e19feb91649df01ff7fefa81ab106 done
+#10 naming to docker.io/library/app-fundamentos:1.1 0.0s done
+#10 DONE 0.0s
+
+PS> docker run --rm -d --name app03-health -p 3000:3000 app-fundamentos:1.1
+016b2aa0cd6e886b7335beb53b15b3d4aa908f91203532cd6ffe58e99e5720b6
+
+PS> docker ps --filter name=app03-health
+CONTAINER ID   IMAGE                 COMMAND                  CREATED        STATUS                                     PORTS                                         NAMES
+016b2aa0cd6e   app-fundamentos:1.1   "docker-entrypoint.s…"   1 second ago   Up Less than a second (health: starting)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp   app03-health
+
+PS> docker ps --filter name=app03-health
+CONTAINER ID   IMAGE                 COMMAND                  CREATED          STATUS                    PORTS                                         NAMES
+016b2aa0cd6e   app-fundamentos:1.1   "docker-entrypoint.s…"   13 seconds ago   Up 12 seconds (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp   app03-health
+
+PS> docker stop app03-health
+app03-health

@@ -1,0 +1,92 @@
+﻿# pratica04-volumes  -  executado em 2026-11-04 21:29:12 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - bind mount (3 execuções)
+
+PS> docker run --rm -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\scripts:/scripts:ro" -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\dados:/dados" alpine sh /scripts/contador.sh
+Contador atual: 1
+--- historico (log.txt) ---
+2026-11-05 00:29:13 - execucao numero 1
+
+PS> docker run --rm -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\scripts:/scripts:ro" -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\dados:/dados" alpine sh /scripts/contador.sh
+Contador atual: 2
+--- historico (log.txt) ---
+2026-11-05 00:29:13 - execucao numero 1
+2026-11-05 00:29:14 - execucao numero 2
+
+PS> docker run --rm -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\scripts:/scripts:ro" -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\dados:/dados" alpine sh /scripts/contador.sh
+Contador atual: 3
+--- historico (log.txt) ---
+2026-11-05 00:29:13 - execucao numero 1
+2026-11-05 00:29:14 - execucao numero 2
+2026-11-05 00:29:15 - execucao numero 3
+
+## Arquivos criados no HOST (fora do container)
+
+PS> Get-ChildItem dados
+.gitkeep
+contador.txt
+log.txt
+
+PS> Get-Content dados\contador.txt
+3
+
+PS> Get-Content dados\log.txt
+2026-11-05 00:29:13 - execucao numero 1
+2026-11-05 00:29:14 - execucao numero 2
+2026-11-05 00:29:15 - execucao numero 3
+
+## Passo 2 - named volume
+
+PS> docker volume create dados-contador
+dados-contador
+
+PS> docker run --rm -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\scripts:/scripts:ro" -v dados-contador:/dados alpine sh /scripts/contador.sh
+Contador atual: 1
+--- historico (log.txt) ---
+2026-11-05 00:29:16 - execucao numero 1
+
+PS> docker volume inspect dados-contador
+[
+    {
+        "CreatedAt": "2026-11-05T00:29:15Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/dados-contador/_data",
+        "Name": "dados-contador",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
+## Passo 3 - tmpfs (duas execuções seguidas)
+
+PS> docker run --rm -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\scripts:/scripts:ro" --tmpfs /dados alpine sh /scripts/contador.sh
+Contador atual: 1
+--- historico (log.txt) ---
+2026-11-05 00:29:17 - execucao numero 1
+
+PS> docker run --rm -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\scripts:/scripts:ro" --tmpfs /dados alpine sh /scripts/contador.sh
+Contador atual: 1
+--- historico (log.txt) ---
+2026-11-05 00:29:18 - execucao numero 1
+
+## Desafio - remover o volume e montar de novo
+
+PS> docker volume ls
+DRIVER    VOLUME NAME
+local     dados-contador
+
+PS> docker volume rm dados-contador
+dados-contador
+
+PS> docker run --rm -v "C:\Users\joaol\Downloads\roteiro_docker_unifeg_2026b\labs\04-volumes-bind-mounts\scripts:/scripts:ro" -v dados-contador:/dados alpine sh /scripts/contador.sh
+Contador atual: 1
+--- historico (log.txt) ---
+2026-11-05 00:29:19 - execucao numero 1
+
+PS> docker volume ls --filter name=dados-contador
+DRIVER    VOLUME NAME
+local     dados-contador
+
+PS> docker volume rm dados-contador
+dados-contador

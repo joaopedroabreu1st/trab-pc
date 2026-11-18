@@ -1,0 +1,498 @@
+﻿# pratica11-multistage  -  executado em 2026-11-04 21:37:50 no host LAPTOP-D8AFL2OO
+
+## Passo 1 - build das duas versões
+
+PS> docker build -f Dockerfile.single-stage -t app-multistage:single .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.single-stage
+#1 transferring dockerfile: 473B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/node:20
+#2 DONE 2.6s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 72B 0.0s done
+#3 DONE 0.1s
+
+#4 [1/7] FROM docker.io/library/node:20@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5
+#4 resolve docker.io/library/node:20@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5
+#4 ...
+
+#5 [internal] load build context
+#5 transferring context: 1.07kB 0.1s done
+#5 DONE 0.1s
+
+#4 [1/7] FROM docker.io/library/node:20@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5
+#4 resolve docker.io/library/node:20@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5 0.0s done
+#4 sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5 6.41kB / 6.41kB done
+#4 sha256:cacf10e99285cbbc891452e31249c1b5ec3ba225f40028fae946b75aeaf1b66a 2.49kB / 2.49kB done
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 0B / 64.40MB 0.1s
+#4 sha256:33ed5ef90e835c40007b658b2d7cb1354b282bffcb53feceb305e9feff1d98e1 6.75kB / 6.75kB done
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 0B / 48.49MB 0.1s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 0B / 24.04MB 0.1s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 3.15MB / 24.04MB 1.0s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 7.34MB / 24.04MB 1.2s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 10.49MB / 24.04MB 1.4s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 4.19MB / 48.49MB 1.6s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 13.63MB / 24.04MB 1.6s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 7.34MB / 48.49MB 1.9s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 16.78MB / 24.04MB 1.9s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 4.19MB / 64.40MB 2.1s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 10.49MB / 48.49MB 2.2s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 18.87MB / 24.04MB 2.2s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 20.97MB / 24.04MB 2.4s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 8.39MB / 64.40MB 2.6s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 13.63MB / 48.49MB 2.6s
+#4 sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 24.04MB / 24.04MB 2.7s done
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 0B / 211.55MB 2.8s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 13.63MB / 64.40MB 3.0s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 17.83MB / 48.49MB 3.0s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 20.97MB / 48.49MB 3.2s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 18.87MB / 64.40MB 3.5s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 24.12MB / 48.49MB 3.7s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 24.12MB / 64.40MB 3.9s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 28.31MB / 64.40MB 4.3s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 11.53MB / 211.55MB 4.3s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 27.26MB / 48.49MB 4.5s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 34.60MB / 64.40MB 4.8s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 30.41MB / 48.49MB 5.1s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 38.80MB / 64.40MB 5.6s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 33.55MB / 48.49MB 5.7s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 36.70MB / 48.49MB 6.1s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 44.04MB / 64.40MB 6.3s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 23.07MB / 211.55MB 6.3s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 40.89MB / 48.49MB 6.6s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 49.28MB / 64.40MB 6.9s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 46.14MB / 48.49MB 7.1s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 54.53MB / 64.40MB 7.4s
+#4 sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 48.49MB / 48.49MB 7.4s done
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 34.60MB / 211.55MB 7.5s
+#4 sha256:c83419f4430962505175b565eb8a24aafeaa4d441c0b22234e94c6e8160848ba 0B / 3.32kB 7.6s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 58.72MB / 64.40MB 7.7s
+#4 extracting sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 63.96MB / 64.40MB 8.0s
+#4 sha256:c83419f4430962505175b565eb8a24aafeaa4d441c0b22234e94c6e8160848ba 3.32kB / 3.32kB 7.9s done
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 0B / 48.62MB 7.9s
+#4 sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 64.40MB / 64.40MB 8.1s done
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 46.14MB / 211.55MB 8.3s
+#4 sha256:2f2ab6e4eb4619f7b8506c38dc79c8adf77acffb7622bc15ceeabb0fbc73b8a1 0B / 1.25MB 8.3s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 3.15MB / 48.62MB 8.6s
+#4 sha256:2f2ab6e4eb4619f7b8506c38dc79c8adf77acffb7622bc15ceeabb0fbc73b8a1 1.25MB / 1.25MB 8.5s done
+#4 sha256:0b22ec2d9b1a1a0e906e301b5ef08efe7774d5fc001b9cfa08e4e980152a0357 0B / 448B 8.6s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 7.34MB / 48.62MB 8.9s
+#4 sha256:0b22ec2d9b1a1a0e906e301b5ef08efe7774d5fc001b9cfa08e4e980152a0357 448B / 448B 8.9s done
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 58.72MB / 211.55MB 9.2s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 11.53MB / 48.62MB 9.2s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 14.68MB / 48.62MB 9.5s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 17.83MB / 48.62MB 9.7s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 20.97MB / 48.62MB 9.9s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 71.30MB / 211.55MB 10.1s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 27.26MB / 48.62MB 10.3s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 31.46MB / 48.62MB 10.6s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 83.89MB / 211.55MB 10.9s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 35.65MB / 48.62MB 10.9s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 38.80MB / 48.62MB 11.1s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 41.94MB / 48.62MB 11.3s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 46.14MB / 48.62MB 11.6s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 95.42MB / 211.55MB 11.7s
+#4 sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 48.62MB / 48.62MB 11.8s done
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 108.00MB / 211.55MB 12.6s
+#4 extracting sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 5.1s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 120.59MB / 211.55MB 13.3s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 132.12MB / 211.55MB 13.9s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 145.75MB / 211.55MB 14.6s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 158.33MB / 211.55MB 15.2s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 169.87MB / 211.55MB 15.7s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 183.50MB / 211.55MB 16.4s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 196.08MB / 211.55MB 17.1s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 207.62MB / 211.55MB 17.6s
+#4 sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 211.55MB / 211.55MB 17.8s done
+#4 extracting sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 10.7s
+#4 extracting sha256:db53381ee51f9e43304e236099ba097ae1b33ae41a8007e0b6319992eb55fd00 11.1s done
+#4 extracting sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e
+#4 extracting sha256:e5203b2bfeff92b72e816dc6cbb1f16856f0cd592e521e3c0cfa195a78fe180e 2.0s done
+#4 extracting sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa
+#4 extracting sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 5.1s
+#4 extracting sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 10.1s
+#4 extracting sha256:8fcda2b4d7993820b00c5488d173051e76d01ba6b85620617ba77001b0f9e2fa 11.2s done
+#4 extracting sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9
+#4 extracting sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 5.1s
+#4 extracting sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 10.2s
+#4 extracting sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 15.3s
+#4 extracting sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 20.7s
+#4 extracting sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 25.8s
+#4 extracting sha256:2933ecab0f11302fd71f29aa83ad2904683246f7a8320ad0dc3a60b23f05fee9 30.0s done
+#4 extracting sha256:c83419f4430962505175b565eb8a24aafeaa4d441c0b22234e94c6e8160848ba
+#4 extracting sha256:c83419f4430962505175b565eb8a24aafeaa4d441c0b22234e94c6e8160848ba done
+#4 extracting sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0
+#4 extracting sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 5.1s
+#4 extracting sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 10.2s
+#4 extracting sha256:76e6b8204a89d20e7915fdc9a98ff33cb65fd7ce44ecf5a84b6cfca4bdb3d6d0 10.8s done
+#4 extracting sha256:2f2ab6e4eb4619f7b8506c38dc79c8adf77acffb7622bc15ceeabb0fbc73b8a1
+#4 extracting sha256:2f2ab6e4eb4619f7b8506c38dc79c8adf77acffb7622bc15ceeabb0fbc73b8a1 0.1s done
+#4 extracting sha256:0b22ec2d9b1a1a0e906e301b5ef08efe7774d5fc001b9cfa08e4e980152a0357 done
+#4 DONE 75.4s
+
+#6 [2/7] WORKDIR /app
+#6 DONE 0.4s
+
+#7 [3/7] COPY package.json ./
+#7 DONE 0.1s
+
+#8 [4/7] RUN npm install
+#8 8.281 
+#8 8.281 added 3 packages, and audited 4 packages in 7s
+#8 8.283 
+#8 8.283 found 0 vulnerabilities
+#8 8.287 npm notice
+#8 8.287 npm notice New major version of npm available! 10.8.2 -> 12.2.2
+#8 8.287 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+#8 8.287 npm notice To update run: npm install -g npm@12.2.2
+#8 8.287 npm notice
+#8 DONE 8.4s
+
+#9 [5/7] COPY tsconfig.json ./
+#9 DONE 0.1s
+
+#10 [6/7] COPY src ./src
+#10 DONE 0.1s
+
+#11 [7/7] RUN npm run build
+#11 0.555 
+#11 0.555 > app-multistage@1.0.0 build
+#11 0.555 > tsc
+#11 0.555 
+#11 DONE 5.5s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.7s done
+#12 writing image sha256:685a65475b7fffa8ed1934bf5a4ff66220508f76852f04bc1bd879c3a159244e 0.0s done
+#12 naming to docker.io/library/app-multistage:single 0.0s done
+#12 DONE 0.8s
+
+PS> docker build -f Dockerfile -t app-multistage:multi .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 609B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20
+#2 DONE 1.5s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 1.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 72B done
+#4 DONE 0.0s
+
+#5 [builder 1/7] FROM docker.io/library/node:20@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5
+#5 DONE 0.0s
+
+#6 [stage-1 1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 122B done
+#7 DONE 0.0s
+
+#8 [builder 3/7] COPY package.json ./
+#8 CACHED
+
+#9 [builder 5/7] COPY tsconfig.json ./
+#9 CACHED
+
+#10 [builder 6/7] COPY src ./src
+#10 CACHED
+
+#11 [builder 2/7] WORKDIR /app
+#11 CACHED
+
+#12 [builder 4/7] RUN npm install
+#12 CACHED
+
+#13 [stage-1 2/5] WORKDIR /app
+#13 CACHED
+
+#14 [builder 7/7] RUN npm run build
+#14 CACHED
+
+#15 [stage-1 3/5] COPY package.json ./
+#15 DONE 0.1s
+
+#16 [stage-1 4/5] RUN npm install --omit=dev
+#16 6.764 
+#16 6.764 up to date, audited 1 package in 6s
+#16 6.768 
+#16 6.768 found 0 vulnerabilities
+#16 6.774 npm notice
+#16 6.774 npm notice New major version of npm available! 10.8.2 -> 12.2.2
+#16 6.774 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+#16 6.774 npm notice To update run: npm install -g npm@12.2.2
+#16 6.774 npm notice
+#16 DONE 6.9s
+
+#17 [stage-1 5/5] COPY --from=builder /app/dist ./dist
+#17 DONE 0.1s
+
+#18 exporting to image
+#18 exporting layers
+#18 exporting layers 0.2s done
+#18 writing image sha256:488670a101780da5f7d8f775175cc0d7d09ef4cd461112c94f8bb2817325c583 done
+#18 naming to docker.io/library/app-multistage:multi done
+#18 DONE 0.2s
+
+## Passo 2 - comparação de tamanhos
+
+PS> docker image ls app-multistage
+IMAGE                   ID             DISK USAGE   CONTENT SIZE   EXTRA
+app-multistage:multi    488670a10178        163MB             0B        
+app-multistage:single   685a65475b7f       1.15GB             0B        
+
+## Passo 3 - camadas de cada uma
+
+PS> docker image history app-multistage:single
+IMAGE          CREATED          CREATED BY                                      SIZE      COMMENT
+685a65475b7f   12 seconds ago   CMD ["npm" "start"]                             0B        buildkit.dockerfile.v0
+<missing>      12 seconds ago   EXPOSE [5000/tcp]                               0B        buildkit.dockerfile.v0
+<missing>      12 seconds ago   RUN /bin/sh -c npm run build # buildkit         1.32kB    buildkit.dockerfile.v0
+<missing>      17 seconds ago   COPY src ./src # buildkit                       375B      buildkit.dockerfile.v0
+<missing>      17 seconds ago   COPY tsconfig.json ./ # buildkit                195B      buildkit.dockerfile.v0
+<missing>      17 seconds ago   RUN /bin/sh -c npm install # buildkit           58.2MB    buildkit.dockerfile.v0
+<missing>      26 seconds ago   COPY package.json ./ # buildkit                 351B      buildkit.dockerfile.v0
+<missing>      26 seconds ago   WORKDIR /app                                    0B        buildkit.dockerfile.v0
+<missing>      6 months ago     CMD ["node"]                                    0B        buildkit.dockerfile.v0
+<missing>      6 months ago     ENTRYPOINT ["docker-entrypoint.sh"]             0B        buildkit.dockerfile.v0
+<missing>      6 months ago     COPY docker-entrypoint.sh /usr/local/bin/ # …   388B      buildkit.dockerfile.v0
+<missing>      6 months ago     RUN /bin/sh -c set -ex   && export GNUPGHOME…   5.34MB    buildkit.dockerfile.v0
+<missing>      6 months ago     ENV YARN_VERSION=1.22.22                        0B        buildkit.dockerfile.v0
+<missing>      6 months ago     RUN /bin/sh -c ARCH= && dpkgArch="$(dpkg --p…   160MB     buildkit.dockerfile.v0
+<missing>      6 months ago     ENV NODE_VERSION=20.20.2                        0B        buildkit.dockerfile.v0
+<missing>      6 months ago     RUN /bin/sh -c groupadd --gid 1000 node   &&…   8.94kB    buildkit.dockerfile.v0
+<missing>      6 months ago     RUN /bin/sh -c set -ex;  apt-get update;  ap…   588MB     buildkit.dockerfile.v0
+<missing>      6 months ago     RUN /bin/sh -c set -eux;  apt-get update;  a…   177MB     buildkit.dockerfile.v0
+<missing>      6 months ago     RUN /bin/sh -c set -eux;  apt-get update;  a…   48.4MB    buildkit.dockerfile.v0
+<missing>      6 months ago     # debian.sh --arch 'amd64' out/ 'bookworm' '…   117MB     debuerreotype 0.17
+
+PS> docker image history app-multistage:multi
+IMAGE          CREATED          CREATED BY                                      SIZE      COMMENT
+488670a10178   1 second ago     CMD ["node" "dist/index.js"]                    0B        buildkit.dockerfile.v0
+<missing>      1 second ago     EXPOSE [5000/tcp]                               0B        buildkit.dockerfile.v0
+<missing>      1 second ago     COPY /app/dist ./dist # buildkit                626B      buildkit.dockerfile.v0
+<missing>      1 second ago     RUN /bin/sh -c npm install --omit=dev # buil…   27.4MB    buildkit.dockerfile.v0
+<missing>      8 seconds ago    COPY package.json ./ # buildkit                 351B      buildkit.dockerfile.v0
+<missing>      10 minutes ago   WORKDIR /app                                    0B        buildkit.dockerfile.v0
+<missing>      6 months ago     CMD ["node"]                                    0B        buildkit.dockerfile.v0
+<missing>      6 months ago     ENTRYPOINT ["docker-entrypoint.sh"]             0B        buildkit.dockerfile.v0
+<missing>      6 months ago     COPY docker-entrypoint.sh /usr/local/bin/ # …   388B      buildkit.dockerfile.v0
+<missing>      6 months ago     RUN /bin/sh -c apk add --no-cache --virtual …   5.36MB    buildkit.dockerfile.v0
+<missing>      6 months ago     ENV YARN_VERSION=1.22.22                        0B        buildkit.dockerfile.v0
+<missing>      6 months ago     RUN /bin/sh -c addgroup -g 1000 node     && …   122MB     buildkit.dockerfile.v0
+<missing>      6 months ago     ENV NODE_VERSION=20.20.2                        0B        buildkit.dockerfile.v0
+<missing>      6 months ago     CMD ["/bin/sh"]                                 0B        buildkit.dockerfile.v0
+<missing>      6 months ago     ADD alpine-minirootfs-3.23.4-x86_64.tar.gz /…   8.45MB    buildkit.dockerfile.v0
+
+## Passo 4 - as duas respondem igual
+
+PS> docker run --rm -d --name app-single -p 5000:5000 app-multistage:single
+ac5b7634fb39843d2187e8d1c6d837204fbbe80bf0d06713e9daf3495aaf2ce5
+
+PS> docker run --rm -d --name app-multi -p 5001:5000 app-multistage:multi
+d9d8a8a95a8ed2848bbec431d5cc3163a397437c5f01beddb63a5066e24748ef
+
+PS> curl.exe -s http://localhost:5000
+{"servico":"app-multistage","compilado":true}
+
+PS> curl.exe -s http://localhost:5001
+{"servico":"app-multistage","compilado":true}
+
+PS> docker stop app-single app-multi
+app-single
+app-multi
+
+## Pergunta 2 - imagens intermediárias / cache do estágio builder
+
+PS> docker image ls -a --filter dangling=true
+IMAGE        ID             DISK USAGE   CONTENT SIZE   EXTRA
+<untagged>   d34ade1fa1b6        136MB             0B        
+
+PS> docker builder du
+ID                           RECLAIMABLE   SIZE       LAST ACCESSED
+3m2k0dv6uy8x2vp2tes6okugs    true          0B*        17 seconds ago
+69hcrsmgtsj91ayw5zqra6z1s    true          0B*        32 seconds ago
+7sklknwvy8dprskzssxo8x8s7    true          0B*        10 minutes ago
+99y75tple83uyy79eejwvnyjs    true          0B*        32 seconds ago
+gji6rg31t20tzskuyxix4tg2t    true          0B*        32 seconds ago
+j1fuwoh7dd4nv4utoltlswl8c    true          0B*        17 seconds ago
+jb658n8fqaff60y3cw7m56y3a    true          0B*        6 seconds ago
+pm468v2pvuke5t9m4lgkz24vi    true          0B*        32 seconds ago
+re80d2jw4o4j76a28fopf5ttp    true          0B*        32 seconds ago
+rodtjsdr2yq32mandp1k75vtx    true          0B*        10 minutes ago
+sq8aobdops1hjzaf33y66zg4j    true          0B*        32 seconds ago
+sut9wtgnm7usi5taozwrc4kef    true          0B*        10 minutes ago
+vdprw940tf6vutek38w37rpyu    true          0B*        10 minutes ago
+w69vzb65ge6v5io3cs0z5joie*   true          0B         6 minutes ago
+ys43zuclbsonzcws29lo9eb02    true          0B*        32 seconds ago
+cz3o7mfknzhcwiva23k5616qo*   true          32B        6 seconds ago
+ev4ddigsa0n7kfb4lcix4ag98*   true          32B        10 minutes ago
+0gowqnvhhk4lx034dqscfu04g*   true          104B       6 minutes ago
+3sgwpl77iyuewrnju4azji65k    true          195B*      17 seconds ago
+ikvref886bj4vuumfgguifjr8    true          243B*      10 minutes ago
+2823kaxh20on4obdypsp22ajt*   true          340B       10 minutes ago
+ep58hng1qgfa178xdmsda3zf2    true          351B*      6 seconds ago
+t2gmketa147p9vmxdpqzkwsd0    true          351B*      17 seconds ago
+xx8bczhfgq3h7s97p20qsfx3i    true          375B*      17 seconds ago
+826w91xdznq2n8dw9bzuxvl94*   true          421B       6 seconds ago
+iqjvhplb59svoqtszqc70uxie*   true          471B       6 minutes ago
+nvttmlp9xe8frnpxor84yuiil    true          471B*      6 minutes ago
+tsu553o3toadbs4omsyp95q0j    true          579B*      10 minutes ago
+djnc623x97blsmjxb2cx8h05w    true          586B*      10 minutes ago
+qeb3y1xnul4tqztz802ug7y06    true          626B*      6 seconds ago
+o4qor27jfkdcoe52tbflvcapx*   true          829B       10 minutes ago
+k20ggexyfp9ephbm28rq7tc2s*   true          921B       6 seconds ago
+x4h718z83y24hrwyihaah7u59    true          1.075kB*   10 minutes ago
+cpipvtp409qid5izf6a1ob7r9    true          1.316kB*   6 seconds ago
+vvar5mn08wyu6adf6k1wdo4he    true          27.36MB*   6 seconds ago
+3b91eenscn7koddd0jyxwqy5f    true          58.18MB*   17 seconds ago
+Shared:		85.55MB
+Private:	3.15kB
+Reclaimable:	85.56MB
+Total:		85.56MB
+
+## Desafio - estágio de teste que não afeta a imagem final
+
+PS> docker image ls app-multistage:multi --format '{{.Repository}}:{{.Tag}}  {{.ID}}  {{.Size}}'
+app-multistage:multi  488670a10178  163MB
+   (arquivo editado: Dockerfile - '# ---- estágio 2: produção ----' -> '# ---- estágio de teste (desafio) ----
+# Herda do builder e roda verificações. Não é usado pelo estágio final, então
+# não entra na imagem :multi. Rode com: docker build --target test .
+FROM builder AS test
+RUN test -f dist/index.js \
+ && npx tsc --noEmit \
+ && node -e "require('fs').accessSync('dist/index.js'); console.log('testes OK')"
+
+# ---- estágio 2: produção ----')
+
+PS> docker build --target test -t app-multistage:test .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 958B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20
+#2 DONE 0.4s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 72B 0.0s done
+#3 DONE 0.0s
+
+#4 [builder 1/7] FROM docker.io/library/node:20@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 122B 0.0s done
+#5 DONE 0.0s
+
+#6 [builder 6/7] COPY src ./src
+#6 CACHED
+
+#7 [builder 2/7] WORKDIR /app
+#7 CACHED
+
+#8 [builder 3/7] COPY package.json ./
+#8 CACHED
+
+#9 [builder 5/7] COPY tsconfig.json ./
+#9 CACHED
+
+#10 [builder 4/7] RUN npm install
+#10 CACHED
+
+#11 [builder 7/7] RUN npm run build
+#11 CACHED
+
+#12 [test 1/1] RUN test -f dist/index.js  && npx tsc --noEmit  && node -e "require('fs').accessSync('dist/index.js'); console.log('testes OK')"
+#12 5.794 testes OK
+#12 DONE 5.8s
+
+#13 exporting to image
+#13 exporting layers 0.0s done
+#13 writing image sha256:16c0bd095bb11eb9a990dcaf4089f360ebd824f63f2225dbe859d2e4f25d6ba3 done
+#13 naming to docker.io/library/app-multistage:test 0.0s done
+#13 DONE 0.1s
+
+PS> docker build -f Dockerfile -t app-multistage:multi .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 958B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 0.4s
+
+#2 [internal] load metadata for docker.io/library/node:20
+#2 DONE 0.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 72B done
+#4 DONE 0.0s
+
+#5 [builder 1/7] FROM docker.io/library/node:20@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5
+#5 DONE 0.0s
+
+#6 [stage-2 1/5] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 122B done
+#7 DONE 0.0s
+
+#8 [builder 5/7] COPY tsconfig.json ./
+#8 CACHED
+
+#9 [stage-2 4/5] RUN npm install --omit=dev
+#9 CACHED
+
+#10 [stage-2 3/5] COPY package.json ./
+#10 CACHED
+
+#11 [stage-2 2/5] WORKDIR /app
+#11 CACHED
+
+#12 [builder 3/7] COPY package.json ./
+#12 CACHED
+
+#13 [builder 4/7] RUN npm install
+#13 CACHED
+
+#14 [builder 2/7] WORKDIR /app
+#14 CACHED
+
+#15 [builder 6/7] COPY src ./src
+#15 CACHED
+
+#16 [builder 7/7] RUN npm run build
+#16 CACHED
+
+#17 [stage-2 5/5] COPY --from=builder /app/dist ./dist
+#17 CACHED
+
+#18 exporting to image
+#18 exporting layers done
+#18 writing image sha256:488670a101780da5f7d8f775175cc0d7d09ef4cd461112c94f8bb2817325c583 done
+#18 naming to docker.io/library/app-multistage:multi done
+#18 DONE 0.0s
+
+PS> docker image ls app-multistage --format '{{.Repository}}:{{.Tag}}  {{.ID}}  {{.Size}}'
+app-multistage:test  16c0bd095bb1  1.15GB
+app-multistage:multi  488670a10178  163MB
+app-multistage:single  685a65475b7f  1.15GB
