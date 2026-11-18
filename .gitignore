@@ -1,0 +1,29 @@
+# Versão do professor (gabaritos) — não publicar
+docs/Roteiro_Docker_Professor.docx
+docs/~$*
+
+# Gerador dos .docx (contém os gabaritos no código-fonte) — não publicar
+gerador/
+
+# Ambiente virtual Python
+.env/
+
+# Prompt interno usado para gerar o material
+prompt.md
+
+# Node
+node_modules/
+
+# Arquivos de sistema
+Thumbs.db
+.DS_Store
+
+# --- Entrega do aluno ---
+# .env com as senhas reais geradas para as práticas 09, 10 e 14 (nunca versionar)
+.env
+# Scripts auxiliares usados para automatizar a coleta das evidências (não fazem parte do roteiro)
+ferramentas_claude/
+# Arquivo temporário do Word
+entrega/~$*
+# Rascunho pessoal de estudo das perguntas (não publicar: repositório público)
+entrega/RESPOSTAS_rascunho.md
